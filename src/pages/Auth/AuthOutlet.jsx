@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack, useTheme, Typography } from '@mui/material';
+import { Stack, useTheme, Typography, stackClasses } from '@mui/material';
 import { FormSX } from './Auth.styles';
 
 function AuthOutlet({ children, header }) {
@@ -33,5 +33,5 @@ function AuthOutlet({ children, header }) {
     </form>
   );
 }
-
 export default AuthOutlet;
+

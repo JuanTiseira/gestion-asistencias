@@ -77,7 +77,7 @@ function Login() {
         <Link
           variant="body2"
           textAlign="right"
-          onClick={() => navigate('/forgot-password')}
+          onClick={() => navigate('/home')}
         >
           Forgot password?
         </Link>
