@@ -7,56 +7,75 @@ import {
   Button,
   Link,
   IconButton,
+  Alert,
 } from '@mui/material';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
 import AuthOutlet from './AuthOutlet';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser, errorUser, loadingUser } from '@/features/user/userSlice';
 
 function Login() {
-  const email = useRef(null);
-  const password = useRef(null);
+  const error = useSelector(errorUser);
+  const loading = useSelector(loadingUser);
+  const user = useRef(null);
+  const pass = useRef(null);
+  const [username, setEmail] = useState('');
+  const [password, setPass] = useState('');
+
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
+  const dispatch = useDispatch();
 
   const loginHandler = async (e) => {
     e.preventDefault();
-    const user = email.current.value.replace(/\s+/g, '');
-    const pwd = password.current.value.replace(/\s+/g, '');
-    if (user === '') {
+    console.log(username, password)
+    if (username === '') {
       // Please enter your email.
-      email.current.focus();
-    } else if (pwd === '') {
+      user.current.focus();
+    } else if (password === '') {
       // 'Please enter your password.'
-      password.current.focus();
+      pass.current.focus();
     } else {
-      // do login stuff
+
+      let userCredential={
+        username, password
+      }
+      dispatch(loginUser(userCredential)).then((result)=>{
+        if(result.payload){
+          setEmail('');
+          setEmail('');
+          navigate('/home');
+        }
+      })
     }
   };
 
-  /** Focus email input when component mounted. */
   useEffect(() => {
-    email.current.focus();
+    user.current.focus();
   }, []);
 
   return (
-    <AuthOutlet>
+    <AuthOutlet header={"Bienvenido de nuevo!"}>
       <TextField
-        inputRef={email}
-        type="email"
-        label="E-mail"
+        inputRef={user}
+        type="text"
+        label="Usuario"
         variant="outlined"
         autoComplete="off"
+        onChange={(e)=>setEmail(e.target.value)}
       />
       <Stack gap={1}>
         <TextField
-          inputRef={password}
+          inputRef={pass}
           type={showPassword ? 'text' : 'password'}
-          label="Password"
+          label="Constraseña"
           variant="outlined"
+          onChange={(e)=>setPass(e.target.value)}
           sx={{ '& .MuiInputBase-root ': { pr: '4px' } }}
           autoComplete="new-password"
           InputProps={{
@@ -74,30 +93,11 @@ function Login() {
             ),
           }}
         />
-        <Link
-          variant="body2"
-          textAlign="right"
-          onClick={() => navigate('/home')}
-        >
-          Forgot password?
-        </Link>
-
         <Button variant="contained" onClick={loginHandler}>
-          Sign in
+          {loading?"Iniciando sesion...":"Iniciar sesion"}
         </Button>
+      {error&&(<Alert severity="error">{error}</Alert>)}
       </Stack>
-      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Typography variant="body2" component="p">
-          Dont you have an account?
-        </Typography>
-        <Link
-          variant="body2"
-          sx={{ display: 'inline', ml: 1 }}
-          onClick={() => navigate('/register')}
-        >
-          Register
-        </Link>
-      </Box>
     </AuthOutlet>
   );
 }

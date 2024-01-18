@@ -8,8 +8,10 @@ import Dashboard from '@/pages/Dashboard/Dashboard';
 function Routing() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/home" element={<Dashboard />} />
+      <Route path="/home" element={<Home />} />
+      <Route path="/asistencias" element={<Dashboard />} />
+      <Route path="/administracion" element={<Dashboard />} />
+      <Route path="/alumnos" element={<Dashboard />} />
       <Route path="/login/*" element={<Login />} />
       <Route path="/register/*" element={<Register />} />
     </Routes>

@@ -1,18 +1,26 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import HomeIcon from '@mui/icons-material/Home';
+import EventIcon from '@mui/icons-material/Event';
+import BusinessIcon from '@mui/icons-material/Business';
+import PersonIcon from '@mui/icons-material/Person';
 
 export default function TemporaryDrawer({ isOpen, toggleDrawer }) {
-  
+
+  const menuItems = [
+    { text: 'Inicio', path: '/home', icon: <HomeIcon /> },
+    { text: 'Asistencias', path: '/asistencias', icon: <EventIcon /> },
+    { text: 'Administracion', path: '/administracion', icon: <BusinessIcon /> },
+    { text: 'Alumnos', path: '/alumnos', icon: <PersonIcon /> },
+  ];
 
   const list = (anchor) => (
     <Box
@@ -22,26 +30,13 @@ export default function TemporaryDrawer({ isOpen, toggleDrawer }) {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
+        {menuItems.map((item) => (
+          <ListItem key={item.text} disablePadding component={Link} to={item.path} sx={{ color: 'inherit', textDecoration: 'none' }}>
             <ListItemButton>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {item.icon}
               </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={item.text} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -53,14 +48,14 @@ export default function TemporaryDrawer({ isOpen, toggleDrawer }) {
     <div>
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
-        <Drawer
-          anchor={anchor}
-          open={isOpen}
-          onClose={toggleDrawer(anchor, false)}
-        >
-          {list(anchor)}
-        </Drawer>
-      </React.Fragment>
+          <Drawer
+            anchor={anchor}
+            open={isOpen}
+            onClose={toggleDrawer(anchor, false)}
+          >
+            {list(anchor)}
+          </Drawer>
+        </React.Fragment>
       ))}
     </div>
   );
