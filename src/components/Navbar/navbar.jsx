@@ -7,17 +7,20 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import TemporaryDrawer from '../Sidebar/sidebar';
+import { useLocation } from 'react-router-dom';
 
 export default function ButtonAppBar() {
   const [isOpen, setIsOpen] = useState(false);
-
+  const location = useLocation();
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
     setIsOpen(open);
   };
-
+  if (location.pathname === '/login') {
+    return null;
+  }
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
