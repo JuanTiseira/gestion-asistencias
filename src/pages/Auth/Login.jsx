@@ -48,7 +48,7 @@ function Login() {
       dispatch(loginUser(userCredential)).then((result)=>{
         if(result.payload){
           setEmail('');
-          setEmail('');
+          setPass('');
           navigate('/home');
         }
       })

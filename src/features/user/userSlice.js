@@ -96,16 +96,29 @@ export const loginUser = createAsyncThunk(
   async(userCredential)=>{
     const request = await axios.post(loginUrl, userCredential)
     const response = await request.data;
-    console.log(response)
-    localStorage.setItem('user', JSON.stringify(response));
+    console.log(response.token, response.username)
+    localStorage.setItem('user', response.username);
+    localStorage.setItem('token', response.token);
+    localStorage.setItem('rol', response.rol);
+
     return response
   }
 )
+const getUserFromLocalStorage = () => {
+  const storedUser = localStorage.getItem('user');
+  return storedUser ? storedUser : null;
+};
+export const logoutUser = createAsyncThunk(
+  'user/logoutUser', async () => {
+  localStorage.removeItem('user');
+  localStorage.removeItem('token');
+  localStorage.removeItem('rol');
+});
 export const userSlice = createSlice({
   name: 'user',
   initialState:{
     loading: false,
-    user: null,
+    user: getUserFromLocalStorage(),
     error: null,
     mode: localStorage.getItem('mode')
       ? localStorage.getItem('mode')
@@ -146,6 +159,23 @@ export const userSlice = createSlice({
         state.error = action.error.message;
       }
     })
+    builder.addCase(logoutUser.pending, (state) => {
+      state.loading = true;
+      state.user = null;
+      state.error = null;
+    });
+
+    builder.addCase(logoutUser.fulfilled, (state) => {
+      state.loading = false;
+      state.user = null;
+      state.error = null;
+    });
+
+    builder.addCase(logoutUser.rejected, (state, action) => {
+      state.loading = false;
+      state.user = null;
+      state.error = action.error.message;
+    });
   }
 })
 
@@ -154,6 +184,6 @@ export const selectUser = (state) => state.user.user;
 export const errorUser = (state) => state.user.error;
 export const loadingUser = (state) => state.user.loading;
 
-export const { setCredentials, logOut, setToken, changeMode } =
+export const { changeMode } =
   userSlice.actions;
 export default userSlice.reducer;

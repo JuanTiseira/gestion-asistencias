@@ -8,10 +8,18 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import TemporaryDrawer from '../Sidebar/sidebar';
 import { useLocation } from 'react-router-dom';
+import { logoutUser, selectUser } from '@/features/user/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function ButtonAppBar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  const handleLogout = () =>{
+    dispatch(logoutUser());
+  }
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
@@ -38,10 +46,15 @@ export default function ButtonAppBar() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Gestion de asistencias
           </Typography>
-          <Typography variant="h7" component="div">
-            Bienvenido 
-          </Typography>
-          <Button color="inherit">Salir</Button>
+          {user?(
+            <Typography variant="h7" component="div">Bienvenido, {user.rol} {user.username} </Typography>
+            
+          ):(null)}
+
+          <Button 
+            color="inherit"
+            onClick={handleLogout}
+          >Salir</Button>
         </Toolbar>
       </AppBar>
       <TemporaryDrawer isOpen={isOpen} toggleDrawer={toggleDrawer} />
