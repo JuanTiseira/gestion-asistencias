@@ -1,78 +1,135 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import MUIDatatable from 'mui-datatables';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUsers, errorUsers, loadingUsers, getUsers } from '@/features/users/usersSlice';
-
+import CustomToolbarSelect from './CustomToolBarSelect';
 const AdminTable = () => {
   const dispatch = useDispatch();
   const usersData = useSelector(selectUsers);
+  
   const handle = () => {
     dispatch(getUsers());
   }
+
+  const handleModificar = (userId) => {
+    // Lógica para manejar la acción de modificar, puedes redirigir a una página de edición, mostrar un modal, etc.
+    console.log("Modificar usuario con ID:", userId);
+  };
+  
+  const handleEliminar = (userId) => {
+    // Lógica para manejar la acción de modificar, puedes redirigir a una página de edición, mostrar un modal, etc.
+    console.log("Eliminar usuario con ID:", userId);
+  };
   const columns = [
- {
-  name: "name",
-  label: "Name",
-  options: {
-   filter: true,
-   sort: true,
-  }
- },
- {
-  name: "company",
-  label: "Company",
-  options: {
-   filter: true,
-   sort: false,
-  }
- },
- {
-  name: "city",
-  label: "City",
-  options: {
-   filter: true,
-   sort: false,
-  }
- },
- {
-  name: "state",
-  label: "State",
-  options: {
-   filter: true,
-   sort: false,
-  }
- },
- 
-];
+    {
+      name: "id",
+      label: "ID",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "nombre",
+      label: "Nombre",
+      options: {
+        filter: true,
+        sort: false,
+      },
+    },
+    {
+      name: "apellido",
+      label: "Apellido",
+      options: {
+        filter: true,
+        sort: false,
+      },
+    },
+    {
+      name: "telefono",
+      label: "Telefono",
+      options: {
+        filter: true,
+        sort: false,
+      },
+    },
+    {
+      name: "email",
+      label: "Email",
+      options: {
+        filter: true,
+        sort: false,
+      },
+    },
+    {
+      name: "rol",
+      label: "Rol",
+      options: {
+        customBodyRender: (value) => value.nombre,
+        filter: true,
+        sort: false,
+      },
+    },
+    {
+      name: "acciones",
+      label: "Acciones",
+      options: {
+        filter: false,
+        sort: false,
+        customBodyRender: (value, tableMeta) => {
+          return (
+            <Button onClick={() => handleModificar(tableMeta.rowData[0])}>
+              Modificar
+            </Button>
+          );
+        },
+      },
+    },
+  ];
 
-// const data = [
-//  { name: "Joe James", company: "Test Corp", city: "Yonkers", state: "NY" },
-//  { name: "John Walsh", company: "Test Corp", city: "Hartford", state: "CT" },
-//  { name: "Bob Herm", company: "Test Corp", city: "Tampa", state: "FL" },
-//  { name: "James Houston", company: "Test Corp", city: "Dallas", state: "TX" },
-// ];
+  const options = {
+    filterType: 'checkbox',
+    responsive: 'standard',
+    customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
+      <CustomToolbarSelect
+        selectedRows={selectedRows}
+        displayData={displayData}
+        setSelectedRows={setSelectedRows}
+        handleModificar={handleEliminar}
+      />
+    ),
+  };
 
-const options = {
-  filterType: 'checkbox',
-  responsive: 'standard',
-};
+  useEffect(() => {
+    dispatch(getUsers());
+  }, []);
+
 
   return (
-    // <Container maxWidth="md" sx={{ marginTop: 4 }}>
-    //   <TableContainer component={Paper}>
-    //     <MUIDatatable
-    //     title={"Lista de usuarios"}
-    //     data={usersData}
-    //     columns={columns}
-    //     options={options}
-    //     />
-    //   </TableContainer>
-    // </Container>
-    <div>
-    <button onClick={handle}></button>
-    <div>{usersData? usersData[0]:"nothing"}</div>
-    </div>
+    <Container>
+      <Paper
+        sx={{
+          padding: 3,
+          marginBottom: 3,
+          boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+          borderRadius: 2,
+        }}
+      >
+      <TableContainer component={Paper}>
+      {usersData ? (
+        <MUIDatatable
+          title={"Lista de usuarios"}
+          data={usersData}
+          columns={columns}
+          options={options}
+        />
+      ) : (
+        <Typography variant="body1">Cargando datos...</Typography>
+      )}
+    </TableContainer>
+    </Paper>
+    </Container>
     
   );
 };

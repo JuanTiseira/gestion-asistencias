@@ -1,10 +1,10 @@
 import React from 'react';
-import { Container, Typography, Box } from '@mui/material';
+import {Paper, Container, Typography, Box, Stack} from '@mui/material';
 import AdminTable from '@/components/Tables/AdminTable/AdminTable';
 
 const Admin = () => {
   return (
-    <Container fixed sx={{ width: "100%", height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+    <Stack>
       {/* Contenido de la página */}
       <Box sx={{ textAlign: "center" }}>
         <Typography variant="h1">
@@ -12,10 +12,8 @@ const Admin = () => {
         </Typography>
       </Box>
 
-      <Box>
-        <AdminTable />
-      </Box>
-    </Container>
+      <AdminTable />
+    </Stack>
   );
 };
 
