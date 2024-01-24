@@ -42,7 +42,7 @@ const Dashboard = () => {
               backgroundColor: 'grey.100',
               color: "white",
             }}>
-            Hola
+            Holassssssssssssssssssssssssssssss
         </Stack>
         <Stack 
           sx={{

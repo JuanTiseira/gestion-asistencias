@@ -1,112 +1,28 @@
-// /* eslint-disable no-param-reassign */
-// /* eslint-disable no-nested-ternary */
-// import { createSlice } from '@reduxjs/toolkit';
-
-// const apiUrl = 'http://localhost:8000';
-// const loginUrl = `${apiUrl}/login/`;
-// // const deletePlantUrl = (plantId) => `${apiUrl}/delete_plant/${plantId}`;
-
-// const initialState = {
-//   token: null,
-//   user: {
-//     Id: import.meta.env.VITE_WEB_USER_ID,
-//     FirstName: '',
-//     LastName: '',
-//   },
-//   mode: localStorage.getItem('mode')
-//     ? localStorage.getItem('mode')
-//     : window.matchMedia('(prefers-color-scheme: dark)').matches
-//     ? 'dark'
-//     : 'light',
-// };
-
-// export const userSlice = createSlice({
-//   name: 'user',
-//   initialState,
-//   reducers: {
-//     setCredentials: (state, action) => {
-//       state.token = action.payload.AccessToken;
-//       state.user = action.payload.User;
-//     },
-//     logOut: (state) => {
-//       state.user = { Id: import.meta.env.VITE_WEB_USER_ID };
-//       state.token = null;
-//       localStorage.removeItem('user');
-//     },
-//     setToken: (state, action) => {
-//       state.token = action.payload;
-//     },
-//     changeMode: (state) => {
-//       if (state.mode === 'light') {
-//         state.mode = 'dark';
-//         localStorage.setItem('mode', 'dark');
-//       } else {
-//         state.mode = 'light';
-//         localStorage.setItem('mode', 'light');
-//       }
-//     },
-//     loginUser: async (state, action) => {
-//       const { username, password } = action.payload;
-
-//       try {
-//         const response = await fetch(loginUrl, {
-//           method: 'POST',
-//           headers: {
-//             'Content-Type': 'application/json',
-//           },
-//           body: JSON.stringify({ username, password }),
-//         });
-
-//         if (response.ok) {
-//           const data = await response.json();
-//           dispatch(setCredentials(data));
-//           console.log(data)
-//         } else {
-//           // Manejar errores de inicio de sesión
-//           console.error('Error de inicio de sesión');
-//         }
-//       } catch (error) {
-//         console.error('Error al realizar la solicitud:', error);
-//       }
-//     },
-//   },
-// });
-
-// export const { setCredentials, logOut, setToken, changeMode, loginUser } =
-//   userSlice.actions;
-
-// export const selectUser = (state) => state.user.user;
-
-// export const selectToken = (state) => state.user.token;
-
-// export const selectMode = (state) => state.user.mode;
-
-// export default userSlice.reducer;
-
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const apiUrl = 'http://localhost:8000';
+const apiUrl = import.meta.env.VITE_API_URL;
+// const apiUrl = 'http://192.168.3.110:8000';
 const loginUrl = `${apiUrl}/login/`;
 // const deletePlantUrl = (plantId) => `${apiUrl}/delete_plant/${plantId}`;
-
+console.log(import.meta.env.VITE_API_URL)
 export const loginUser = createAsyncThunk(
   'user/loginUser',
   async(userCredential)=>{
     const request = await axios.post(loginUrl, userCredential)
     const response = await request.data;
     console.log(response.token, response.username)
-    localStorage.setItem('user', response.username);
+    localStorage.setItem('user', JSON.stringify(response));
     localStorage.setItem('token', response.token);
     localStorage.setItem('rol', response.rol);
-
+    console.log(response)
     return response
   }
 )
 const getUserFromLocalStorage = () => {
   const storedUser = localStorage.getItem('user');
-  return storedUser ? storedUser : null;
+  return storedUser ? JSON.parse(storedUser) : {};
 };
 export const logoutUser = createAsyncThunk(
   'user/logoutUser', async () => {
@@ -181,6 +97,7 @@ export const userSlice = createSlice({
 
 export const selectMode = (state) => state.user.mode;
 export const selectUser = (state) => state.user.user;
+export const selectToken = (state) => state.user.user.token;
 export const errorUser = (state) => state.user.error;
 export const loadingUser = (state) => state.user.loading;
 

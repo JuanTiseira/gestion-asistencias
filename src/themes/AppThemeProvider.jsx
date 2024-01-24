@@ -82,7 +82,10 @@ function AppThemeProvider({ children }) {
       },
 
       typography: {
-        fontFamily: 'Dosis, sans-serif',
+        // fontFamily: 'Dosis, sans-serif',
+        // fontFamily: 'Roboto, sans-serif',
+        fontFamily: 'Nunito, sans-serif',
+
 
         h1: {
           fontSize: '26px',

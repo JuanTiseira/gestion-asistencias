@@ -8,30 +8,36 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import TemporaryDrawer from '../Sidebar/sidebar';
 import { useLocation } from 'react-router-dom';
-import { logoutUser, selectUser } from '@/features/user/userSlice';
+import { logoutUser, selectUser, selectMode, changeMode } from '@/features/user/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
-
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import { useTheme } from '@mui/material';
 export default function ButtonAppBar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-
+  const mode = useSelector(selectMode);
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
-  const handleLogout = () =>{
+  const theme = useTheme();  // Obtén el tema actual
+
+  const handleLogout = () => {
     dispatch(logoutUser());
   }
+
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
     setIsOpen(open);
   };
+
   if (location.pathname === '/login') {
     return null;
   }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ background: theme.palette.warning.main }}>
         <Toolbar>
           <IconButton
             size="large"
@@ -44,14 +50,21 @@ export default function ButtonAppBar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Gestion de asistencias
+            AsistMe
           </Typography>
-          {user?(
-            <Typography variant="h7" component="div">Bienvenido, {user.rol} {user.username} </Typography>
-            
-          ):(null)}
-
-          <Button 
+          <IconButton
+            onClick={() => dispatch(changeMode())}>
+            <Brightness4Icon
+              sx={{
+                transition: 'transform 0.4s',
+                transform: mode === 'dark' ? 'rotateY(180deg)' : 'rotateY(0deg)',
+              }}
+            />
+          </IconButton>
+          {user ? (
+            <Typography variant="h7" component="div">Bienvenido, {((user.username))} </Typography>
+          ) : (null)}
+          <Button
             color="inherit"
             onClick={handleLogout}
           >Salir</Button>
