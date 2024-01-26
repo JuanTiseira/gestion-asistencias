@@ -12,6 +12,7 @@ import { logoutUser, selectUser, selectMode, changeMode } from '@/features/user/
 import { useDispatch, useSelector } from 'react-redux';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import { useTheme } from '@mui/material';
+
 export default function ButtonAppBar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();

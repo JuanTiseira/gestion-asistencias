@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
+import { Typography, TableContainer, Paper, Button, Stack } from '@mui/material';
 import MUIDatatable from 'mui-datatables';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUsers, errorUsers, loadingUsers, getUsers } from '@/features/users/usersSlice';
+import { selectUsers, getUsers } from '@/features/users/usersSlice';
 import CustomToolbarSelect from './CustomToolBarSelect';
 const AdminTable = () => {
   const dispatch = useDispatch();
@@ -107,15 +107,8 @@ const AdminTable = () => {
 
 
   return (
-    <Container>
-      <Paper
-        sx={{
-          padding: 3,
-          marginBottom: 3,
-          boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
-          borderRadius: 2,
-        }}
-      >
+    <Stack>
+      <Paper>
       <TableContainer component={Paper}>
       {usersData ? (
         <MUIDatatable
@@ -129,7 +122,7 @@ const AdminTable = () => {
       )}
     </TableContainer>
     </Paper>
-    </Container>
+    </Stack>
     
   );
 };

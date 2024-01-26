@@ -7,6 +7,8 @@ const apiUrl = import.meta.env.VITE_API_URL;
 const loginUrl = `${apiUrl}/login/`;
 // const deletePlantUrl = (plantId) => `${apiUrl}/delete_plant/${plantId}`;
 console.log(import.meta.env.VITE_API_URL)
+
+
 export const loginUser = createAsyncThunk(
   'user/loginUser',
   async(userCredential)=>{
