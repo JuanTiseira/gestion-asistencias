@@ -9,8 +9,34 @@ const rolsEndpoint = '/api/rol/';
 const usersUrl = `${apiUrl}${usersEndpoint}`;
 const rolsUrl = `${apiUrl}${rolsEndpoint}`;
 
-// const deletePlantUrl = (plantId) => `${apiUrl}/delete_plant/${plantId}`;
+const deleteUserUrl = (userId) => `${usersUrl}${userId}`;
 
+export const deleteUser = createAsyncThunk(
+  'users/deleteUser',
+  async (userId, { getState }) => {
+    const state = getState();
+
+    const config = {
+      headers: {
+        Authorization: `token ${state.user.user.token}`,
+      },
+    };
+
+    try {
+      const response = await axios.delete(deleteUserUrl(userId), config);
+      return response.data;
+    } catch (error) {
+      console.log(error.response.data.error)
+      if (error.response) {
+        throw new Error(error.response.data.error || 'Error desconocido');
+      } else if (error.request) {
+        throw new Error('No se recibió respuesta del servidor');
+      } else {
+        throw new Error('Error al configurar la solicitud');
+      }
+    }
+  }
+);
 
 export const createUser = createAsyncThunk(
   'users/createUser',
@@ -41,6 +67,7 @@ export const createUser = createAsyncThunk(
     }
   }
 );
+
 
 export const getUsers = createAsyncThunk(
   'users/getUsers',
@@ -100,9 +127,13 @@ export const usersSlice = createSlice({
     changeFormData: (state, action) => {
       state.formData = action.payload;
     },
+    selectedUser: (state, action) => {
+      state.selectedUser = action.payload;
+    },
   },
   extraReducers:(builder)=>{
     builder
+    //view usuarios
     .addCase(getUsers.pending,(state)=>{
       state.loading = true;
       state.users = null;
@@ -123,6 +154,7 @@ export const usersSlice = createSlice({
         state.error = action.error.message;
       }
     })
+    //view roles
     builder.addCase(getRols.pending,(state)=>{
       state.loading = true;
       state.roles = null;
@@ -143,7 +175,7 @@ export const usersSlice = createSlice({
         state.error = action.error.message;
       }
     })
-
+    //create users
     builder.addCase(createUser.pending, (state) => {
       // Acciones cuando la solicitud está en curso
       state.loading = true;
@@ -158,12 +190,36 @@ export const usersSlice = createSlice({
       state.error = null;
       state.result = action.payload.message;
     })
+
     builder.addCase(createUser.rejected, (state, action) => {
       // Acciones cuando la solicitud falla
       state.loading = false;
       console.log(action.error.message)
       state.error = action.error.message
       state.result = null
+    });
+
+    // deleteUser reducer
+    builder.addCase(deleteUser.pending, (state) => {
+      // Acciones cuando la solicitud está en curso
+      state.loading = true;
+      state.error = null;
+      state.result = null;
+    })
+    builder.addCase(deleteUser.fulfilled, (state, action) => {
+      // Acciones cuando la solicitud es exitosa
+      state.loading = false;
+      // Filtrar el usuario eliminado
+      state.users = state.users.filter(user => user.id !== action.meta.arg);
+      state.error = null;
+      state.result = action.payload.message;
+    })
+    builder.addCase(deleteUser.rejected, (state, action) => {
+      // Acciones cuando la solicitud falla
+      state.loading = false;
+      console.log(action.error.message);
+      state.error = action.error.message;
+      state.result = null;
     });
   }
 })
@@ -174,7 +230,8 @@ export const resultUsers = (state) => state.users.result;
 export const loadingUsers = (state) => state.users.loading;
 export const getFormData = (state) => state.users.formData;
 export const getRoles = (state) => state.users.roles;
+export const selectedUserData = (state) => state.users.selectedUser;
 
-export const { changeFormData } =
+export const { changeFormData, selectedUser } =
   usersSlice.actions;
 export default usersSlice.reducer;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Typography, Box, Button } from '@mui/material';
 import AdminTable from '@/components/Tables/AdminTable/AdminTable';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeFormData, getFormData, loadingUsers, getRols } from '@/features/users/usersSlice';
+import { changeFormData, getFormData, loadingUsers, getRols, getUsers } from '@/features/users/usersSlice';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '@/components/Spinners/Spinner';
 
@@ -27,6 +27,7 @@ const Admin = () => {
  
   useEffect(() => {
     dispatch(getRols());
+    dispatch(getUsers());
   }, []);
   
   return (
