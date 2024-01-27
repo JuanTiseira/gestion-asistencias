@@ -71,7 +71,7 @@ export default function ButtonAppBar() {
           >Salir</Button>
         </Toolbar>
       </AppBar>
-      <TemporaryDrawer isOpen={isOpen} toggleDrawer={toggleDrawer} />
+      <TemporaryDrawer isOpen={isOpen} toggleDrawer={toggleDrawer} username={"juani"} role={"admin"}/>
     </Box>
   );
 }

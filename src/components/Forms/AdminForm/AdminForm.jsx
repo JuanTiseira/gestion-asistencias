@@ -20,6 +20,7 @@ import {
 import CustomSelect from '@/components/Select/CustomSelect';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '@/components/Spinners/Spinner';
+import Swal from 'sweetalert2';
 
 const validationSchema = Yup.object({
   nombre: Yup.string().required('El nombre es requerido'),
@@ -31,54 +32,45 @@ const validationSchema = Yup.object({
   telefono: Yup.string().required('El teléfono es requerido'),
 });
 
-const UsuariosForm = () => {
+const UsuariosForm = ({ values, isEdit, onSubmit }) => {
     const dispatch = useDispatch();
     const roles = useSelector(getRoles);
     const formData = useSelector(getFormData);
     const navigate = useNavigate();
     const error = useSelector(errorUsers);
     const loading = useSelector(loadingUsers);
-    const result = useSelector(resultUsers)
+    const result = useSelector(resultUsers);
 
     const formik = useFormik({
-    initialValues: {
-      nombre: '',
-      apellido: '',
-      dni: '',
-      direccion: '',
-      fecha_nacimiento: '',
-      email: '',
-      telefono: '',
-      rol: '',
-      username: '',
-      password: '',
-    },
+    initialValues: values,
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      dispatch(changeFormData(values));
-      dispatch(createUser(values)).then((result)=>{
-        if(result.payload){
-          console.log(result.payload.message)
-        }
-      })
-    },
+    onSubmit: onSubmit, 
   });
+  
   const handleReset = () => {
     formik.resetForm();
   };
   const theme = useTheme();  // Obtén el tema actual
   
-  if (loading) {
-    console.log("dsdsd",loading)
-    return <Spinner></Spinner>
-  }
 
+  useEffect(() => {
+    dispatch(getRols());
+  }, []);
+  useEffect(() => {
+    if (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error,
+      });
+    }
+  }, [error]);
   return (
     <Stack>
       {/* Contenido de la página */}
       <Box sx={{ textAlign: "center", margin: "25px" }}>
         <Typography variant="h1" sx={{ color: theme.palette.warning.main }}>
-          Agregar Usuario
+          {isEdit? "Editar Usuario": "Agregar Usuario "}
         </Typography>
       </Box>
 
@@ -87,8 +79,6 @@ const UsuariosForm = () => {
         <Paper elevation={3} sx={{ padding: 3, borderRadius: 2 }}>
           <form onSubmit={formik.handleSubmit}>
             <Stack spacing={2}>
-            {error&&(<Alert icon={<CheckIcon fontSize="inherit"/>} severity="error">{error}</Alert>)}
-            {result&&(<Alert severity="success">{result}</Alert>)}
               <TextField
                 label="Nombre"
                 id="nombre"
@@ -169,7 +159,7 @@ const UsuariosForm = () => {
                 helperText={formik.touched.telefono && formik.errors.telefono}
               />
 
-              <CustomSelect
+              {roles && <CustomSelect
                 options={roles}
                 label="Selecciona un rol"
                 value={formik.values.rol}
@@ -178,7 +168,7 @@ const UsuariosForm = () => {
                   }}
                 valueKey="id"
                 labelKey="nombre"
-              />
+              />}
 
               <TextField
                 label="Usuario"

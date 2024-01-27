@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -12,8 +12,9 @@ import HomeIcon from '@mui/icons-material/Home';
 import EventIcon from '@mui/icons-material/Event';
 import BusinessIcon from '@mui/icons-material/Business';
 import PersonIcon from '@mui/icons-material/Person';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
-export default function TemporaryDrawer({ isOpen, toggleDrawer }) {
+export default function TemporaryDrawer({ isOpen, toggleDrawer, username, role }) {
 
   const menuItems = [
     { text: 'Inicio', path: '/home', icon: <HomeIcon /> },
@@ -30,6 +31,13 @@ export default function TemporaryDrawer({ isOpen, toggleDrawer }) {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
+        <ListItem disablePadding sx={{ color: 'inherit', textDecoration: 'none' }}>
+          <ListItemText primary={username} secondary={role} />
+          <ListItemIcon>
+            <PersonIcon />
+          </ListItemIcon>
+        </ListItem>
+        <Divider />
         {menuItems.map((item) => (
           <ListItem key={item.text} disablePadding component={Link} to={item.path} sx={{ color: 'inherit', textDecoration: 'none' }}>
             <ListItemButton>
@@ -40,6 +48,15 @@ export default function TemporaryDrawer({ isOpen, toggleDrawer }) {
             </ListItemButton>
           </ListItem>
         ))}
+        <Divider />
+        <ListItem disablePadding sx={{ color: 'inherit', textDecoration: 'none' }}>
+          <ListItemButton>
+            <ListItemIcon>
+              <ExitToAppIcon />
+            </ListItemIcon>
+            <ListItemText primary="Salir" />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );

@@ -8,9 +8,9 @@ import Spinner from '@/components/Spinners/Spinner';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
-const AdminTable = () => {
+const AdminTable = ({ theme, usersData }) => {
   const dispatch = useDispatch();
-  const usersData = useSelector(selectUsers);
+  // const usersData = useSelector(selectUsers);
   const loading = useSelector(loadingUsers);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const AdminTable = () => {
     const selectedUserData = usersData.find((user) => user.id === userId);
     console.log("Usuario seleccionado:", selectedUserData);
     dispatch(selectedUser(selectedUserData));
-    // navigate("/administracion/editar-usuario");
+    navigate("/administracion/editar-usuario");
   };
   
   const handleEliminar = (userId) => {
@@ -141,8 +141,10 @@ const AdminTable = () => {
   };
 
   useEffect(() => {
-    dispatch(getUsers());
-  }, []);
+    if (!usersData) {
+      dispatch(getUsers());
+    }
+  }, [dispatch, usersData]);
 
   
   return (

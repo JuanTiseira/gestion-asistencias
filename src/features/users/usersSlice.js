@@ -73,7 +73,6 @@ export const getUsers = createAsyncThunk(
   'users/getUsers',
   async(_, { getState })=>{
     const state = getState()
-
     const config = {
         headers: {
           Authorization: `token ${state.user.user.token}`,
@@ -116,8 +115,8 @@ export const usersSlice = createSlice({
   name: 'users',
   initialState:{
     loading: false,
-    users: [],
-    roles: '',
+    users: null,
+    roles: [],
     error: null,
     result: null,
     selectedUser: '',

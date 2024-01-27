@@ -2,13 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Container, Typography, Box, Button } from '@mui/material';
 import AdminTable from '@/components/Tables/AdminTable/AdminTable';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeFormData, getFormData, loadingUsers, getRols, getUsers } from '@/features/users/usersSlice';
+import { changeFormData, getFormData, loadingUsers, getRols, getUsers, selectUsers } from '@/features/users/usersSlice';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '@/components/Spinners/Spinner';
+import { useTheme } from '@emotion/react';
 
 const Admin = () => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const loading = useSelector(loadingUsers);
+  const usersData = useSelector(selectUsers);
+
   const initialData = {
     "name": "John Doe"
   };
@@ -26,9 +30,10 @@ const Admin = () => {
   };
  
   useEffect(() => {
+    console.log("dispachando")
     dispatch(getRols());
     dispatch(getUsers());
-  }, []);
+  }, [dispatch]);
   
   return (
     <Container>
@@ -46,7 +51,7 @@ const Admin = () => {
         </Button>
       </Box>
       
-      <AdminTable />
+      {usersData ? <AdminTable theme={theme} usersData={usersData}/> : null}
 
     </Container>
   );
