@@ -4,9 +4,11 @@ import { selectToken } from '../user/userSlice';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 const usersEndpoint = '/api/usuarios/';
+const usersModifyEndpoint = '/api/usuarios/edit_user/';
 const rolsEndpoint = '/api/rol/';
 
 const usersUrl = `${apiUrl}${usersEndpoint}`;
+const usersModifyUrl = `${apiUrl}${usersModifyEndpoint}`;
 const rolsUrl = `${apiUrl}${rolsEndpoint}`;
 
 const deleteUserUrl = (userId) => `${usersUrl}${userId}`;
@@ -51,6 +53,37 @@ export const createUser = createAsyncThunk(
 
     try {
       const response = await axios.post(usersUrl, userData, config);
+      return response.data;
+    } catch (error) {
+      console.log(error.response.data.error)
+      if (error.response) {
+        // Si hay una respuesta del servidor con un mensaje de error personalizado
+        throw new Error(error.response.data.error || 'Error desconocido');
+      } else if (error.request) {
+        // Si la solicitud se hizo pero no se recibió una respuesta del servidor
+        throw new Error('No se recibió respuesta del servidor');
+      } else {
+        // Si ocurrió un error durante la configuración de la solicitud
+        throw new Error('Error al configurar la solicitud');
+      }
+    }
+  }
+);
+
+
+export const modifyUser = createAsyncThunk(
+  'users/modifyUser',
+  async (userData, { getState }) => {
+    const state = getState();
+
+    const config = {
+      headers: {
+        Authorization: `token ${state.user.user.token}`,
+      },
+    };
+
+    try {
+      const response = await axios.post(usersModifyUrl, userData, config);
       return response.data;
     } catch (error) {
       console.log(error.response.data.error)
@@ -119,7 +152,7 @@ export const usersSlice = createSlice({
     roles: [],
     error: null,
     result: null,
-    selectedUser: '',
+    selectedUser: null,
     formData: '',
   },
   reducers:{
@@ -219,6 +252,29 @@ export const usersSlice = createSlice({
       console.log(action.error.message);
       state.error = action.error.message;
       state.result = null;
+    });
+    //modify users
+    builder.addCase(modifyUser.pending, (state) => {
+      // Acciones cuando la solicitud está en curso
+      state.loading = true;
+      state.error = null;
+      state.result = null
+
+    })
+    builder.addCase(modifyUser.fulfilled, (state, action) => {
+      // Acciones cuando la solicitud es exitosa
+      state.loading = false;
+      state.users.push(action.payload); // Asumiendo que el servidor devuelve el nuevo usuario
+      state.error = null;
+      state.result = action.payload.message;
+    })
+
+    builder.addCase(modifyUser.rejected, (state, action) => {
+      // Acciones cuando la solicitud falla
+      state.loading = false;
+      console.log(action.error.message)
+      state.error = action.error.message
+      state.result = null
     });
   }
 })

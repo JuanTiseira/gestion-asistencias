@@ -40,7 +40,10 @@ const UsuariosForm = ({ values, isEdit, onSubmit }) => {
     const error = useSelector(errorUsers);
     const loading = useSelector(loadingUsers);
     const result = useSelector(resultUsers);
+    const [empty, setEmpty] = useState(false);
 
+   
+    
     const formik = useFormik({
     initialValues: values,
     validationSchema: validationSchema,
@@ -56,6 +59,9 @@ const UsuariosForm = ({ values, isEdit, onSubmit }) => {
   useEffect(() => {
     dispatch(getRols());
   }, []);
+  
+  
+
   useEffect(() => {
     if (error) {
       Swal.fire({
@@ -65,6 +71,7 @@ const UsuariosForm = ({ values, isEdit, onSubmit }) => {
       });
     }
   }, [error]);
+
   return (
     <Stack>
       {/* Contenido de la página */}
@@ -162,7 +169,7 @@ const UsuariosForm = ({ values, isEdit, onSubmit }) => {
               {roles && <CustomSelect
                 options={roles}
                 label="Selecciona un rol"
-                value={formik.values.rol}
+                value={formik.values.rol.id}
                 onChange={(event) => {
                     formik.setFieldValue('rol', event.target.value);
                   }}
@@ -200,7 +207,9 @@ const UsuariosForm = ({ values, isEdit, onSubmit }) => {
                 <Button variant="contained" onClick={() => {navigate("/administracion")}}>
                 Volver
                 </Button>
-               
+               <Button variant="contained" onClick={() => {console.log(values)}}>
+                values
+                </Button>
             </Stack>
           </form>
         </Paper>
