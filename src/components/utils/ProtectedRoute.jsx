@@ -7,7 +7,6 @@ const ProtectedRoute = ({
     redirectpath = '/login'
 }) => {
     const user = useSelector(selectUser)
-    console.log("here in the component route protector",user)
 
     if(!user) {
         return <Navigate to={redirectpath} replace/>

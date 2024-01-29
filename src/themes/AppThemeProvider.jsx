@@ -14,7 +14,7 @@ function AppThemeProvider({ children }) {
       palette: {
         mode,
         primary: {
-          main: '#1c9c7c',
+          main: '#ffffff', //or 1c9c7c
         },
         secondary: {
           main: '#9DF3C4',
@@ -111,6 +111,11 @@ function AppThemeProvider({ children }) {
           fontSize: '16px',
           fontWeight: '500',
           // lineHeight: '20px',
+        },
+        sectionTitle: {
+          fontSize: '45px',
+          fontWeight: '600',
+          // lineHeight: '35px',
         },
 
         CTA1: {

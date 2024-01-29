@@ -13,16 +13,19 @@ import EventIcon from '@mui/icons-material/Event';
 import BusinessIcon from '@mui/icons-material/Business';
 import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '@/features/user/userSlice';
 export default function TemporaryDrawer({ isOpen, toggleDrawer, username, role }) {
-
+  const dispatch = useDispatch();
   const menuItems = [
     { text: 'Inicio', path: '/home', icon: <HomeIcon /> },
     { text: 'Asistencias', path: '/asistencias', icon: <EventIcon /> },
     { text: 'Administracion', path: '/administracion', icon: <BusinessIcon /> },
     { text: 'Alumnos', path: '/alumnos', icon: <PersonIcon /> },
   ];
-
+  const handleLogout = () => {
+    dispatch(logoutUser());
+  }
   const list = (anchor) => (
     <Box
       sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
@@ -54,7 +57,7 @@ export default function TemporaryDrawer({ isOpen, toggleDrawer, username, role }
             <ListItemIcon>
               <ExitToAppIcon />
             </ListItemIcon>
-            <ListItemText primary="Salir" />
+            <ListItemText primary="Salir" onClick={handleLogout}/>
           </ListItemButton>
         </ListItem>
       </List>

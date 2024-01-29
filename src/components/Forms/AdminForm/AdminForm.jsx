@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { Stack, Container, Paper, Typography, Box, Alert } from '@mui/material';
+import { Stack, Container, Paper, Typography, Box, Grid} from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import { useTheme } from '@emotion/react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,7 +21,10 @@ import CustomSelect from '@/components/Select/CustomSelect';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '@/components/Spinners/Spinner';
 import Swal from 'sweetalert2';
-
+import { Save } from '@mui/icons-material';
+import { Home } from '@mui/icons-material';
+import { Clear } from '@mui/icons-material';
+import { BackHand } from '@mui/icons-material';
 const validationSchema = Yup.object({
   nombre: Yup.string().required('El nombre es requerido'),
   apellido: Yup.string().required('El apellido es requerido'),
@@ -198,18 +201,54 @@ const UsuariosForm = ({ values, isEdit, onSubmit }) => {
                 error={formik.touched.password && Boolean(formik.errors.password)}
                 helperText={formik.touched.password && formik.errors.password}
               />
-              <Button variant="contained" type='submit'>
-                Guardar
-                </Button>
-                <Button variant="contained" onClick={handleReset}>
-                Limpiar
-                </Button>
-                <Button variant="contained" onClick={() => {navigate("/administracion")}}>
-                Volver
-                </Button>
-               <Button variant="contained" onClick={() => {console.log(values)}}>
-                values
-                </Button>
+              <Grid container 
+                sx={{
+                    gap:2,
+                    display: 'flex',
+                    justifyContent:{xs: 'start', sm: 'center' },}}
+                direction={{ xs: 'column', sm: 'row' }}>
+
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    type="submit"
+                    startIcon={<Save />}
+                    sx={{ width: { xs: '100%', sm: 'auto' } }}
+                  >
+                    Guardar
+                  </Button>
+                </Grid>
+                <Grid item>
+                  {isEdit ? (
+                    <Button 
+                      variant="contained" 
+                      color="error" 
+                      startIcon={<Clear />} 
+                      disabled 
+                      onClick={handleReset} 
+                      sx={{ width: { xs: '100%', sm: 'auto' } }}>
+                      Limpiar
+                    </Button>
+                  ) : (
+                    <Button variant="contained" color="error" startIcon={<Clear />} onClick={handleReset} sx={{ width: { xs: '100%', sm: 'auto' } }}>
+                      Limpiar
+                    </Button>
+                  )}
+                </Grid>
+                <Grid item>
+                  <Button
+                    startIcon={<Home />}
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => navigate("/administracion")}
+                    sx={{ width: { xs: '100%', sm: 'auto' } }}
+                  >
+                    Volver
+                  </Button>
+                </Grid>
+              </Grid>
+              
             </Stack>
           </form>
         </Paper>

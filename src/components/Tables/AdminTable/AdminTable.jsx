@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, TableContainer, Paper, Button, Stack } from '@mui/material';
+import { Typography, TableContainer, Paper, Button, Stack, IconButton } from '@mui/material';
 import MUIDatatable from 'mui-datatables';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUsers, getUsers, deleteUser, loadingUsers, selectedUser } from '@/features/users/usersSlice';
@@ -7,6 +7,11 @@ import CustomToolbarSelect from './CustomToolBarSelect';
 import Spinner from '@/components/Spinners/Spinner';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+
+
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+
 
 const AdminTable = ({ theme, usersData }) => {
   const dispatch = useDispatch();
@@ -111,12 +116,12 @@ const AdminTable = ({ theme, usersData }) => {
         customBodyRender: (value, tableMeta) => {
           return (
             <div>
-            <Button onClick={() => handleModificar(tableMeta.rowData[0])}>
-              Modificar
-            </Button>
-            <Button onClick={() => handleEliminar(tableMeta.rowData[0])}>
-              Eliminar
-            </Button>
+            <IconButton variant="outlined" aria-label="editar" color="warning" onClick={() => handleModificar(tableMeta.rowData[0])}>
+              <EditIcon />
+            </IconButton>
+            <IconButton variant="outlined" aria-label="eliminar" color="error" onClick={() => handleEliminar(tableMeta.rowData[0])}>
+              <DeleteIcon />
+            </IconButton>
             </div>
             
           );

@@ -6,7 +6,6 @@ const apiUrl = import.meta.env.VITE_API_URL;
 // const apiUrl = 'http://192.168.3.110:8000';
 const loginUrl = `${apiUrl}/login/`;
 // const deletePlantUrl = (plantId) => `${apiUrl}/delete_plant/${plantId}`;
-console.log(import.meta.env.VITE_API_URL)
 
 
 export const loginUser = createAsyncThunk(
@@ -24,7 +23,7 @@ export const loginUser = createAsyncThunk(
 )
 const getUserFromLocalStorage = () => {
   const storedUser = localStorage.getItem('user');
-  return storedUser ? JSON.parse(storedUser) : {};
+  return storedUser ? JSON.parse(storedUser) : null;
 };
 export const logoutUser = createAsyncThunk(
   'user/logoutUser', async () => {

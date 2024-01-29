@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Box, Button } from '@mui/material';
+import { Container, Typography, Box, Button, Stack } from '@mui/material';
 import AdminTable from '@/components/Tables/AdminTable/AdminTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeFormData, getFormData, loadingUsers, getRols, getUsers, selectUsers } from '@/features/users/usersSlice';
@@ -36,22 +36,45 @@ const Admin = () => {
   }, [dispatch]);
   
   return (
-    <Container>
+    <Container
+    sx={{
+      marginTop:'55px',
+      p: 2,
+      boxShadow: 3,
+      borderRadius: 2,
+      backgroundColor: 'grey.100',
+      alignItems:"center",
+      justifyContent:"center",
+      flexDirection: "column"
+    }}>
       {loading && <Spinner />}
       {/* Contenido de la página */}
       <Box sx={{ textAlign: "center", marginY: 3 }}>
-        <Typography variant="h1">
+        <Typography variant="sectionTitle">
           Administracion
         </Typography>
       </Box>
       
-      <Box sx={{ marginBottom: 2 }}>
-        <Button variant="contained" onClick={() => navigate('/administracion/agregar-usuario')}>
+      <Box sx={{
+        p: 2,
+        boxShadow: 3,
+        borderRadius: 2,
+        backgroundColor: 'grey.200',
+        marginBottom:"20px",
+      }}>
+        <Button variant="contained" color="success" onClick={() => navigate('/administracion/agregar-usuario')}>
           Agregar usuario
         </Button>
       </Box>
-      
+      <Stack
+      sx={{
+        boxShadow: 3,
+        backgroundColor: 'grey.200',
+        color: "white",
+      }}>
       {usersData ? <AdminTable theme={theme} usersData={usersData}/> : null}
+
+      </Stack>
 
     </Container>
   );

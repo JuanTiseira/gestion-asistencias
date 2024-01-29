@@ -14,7 +14,9 @@ function Routing() {
 
   return (
     <Routes>
-      <Route path="/" element={<ProtectedRoute />} />
+      <Route element={<ProtectedRoute/>}>
+        <Route path="/" element={<Home />} />
+      </Route>
       <Route element={<ProtectedRoute/>}>
         <Route path="/home" element={<Home />} />
       </Route>

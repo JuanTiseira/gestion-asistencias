@@ -21,9 +21,7 @@ export default function ButtonAppBar() {
   const user = useSelector(selectUser);
   const theme = useTheme();  // Obtén el tema actual
 
-  const handleLogout = () => {
-    dispatch(logoutUser());
-  }
+  
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -38,7 +36,7 @@ export default function ButtonAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ background: theme.palette.warning.main }}>
+      <AppBar position="static">
         <Toolbar>
           <IconButton
             size="large"
@@ -62,13 +60,13 @@ export default function ButtonAppBar() {
               }}
             />
           </IconButton>
-          {user ? (
+          {/* {user ? (
             <Typography variant="h7" component="div">Bienvenido, {((user.username))} </Typography>
-          ) : (null)}
-          <Button
+          ) : (null)} */}
+          {/* <Button
             color="inherit"
             onClick={handleLogout}
-          >Salir</Button>
+          >Salir</Button> */}
         </Toolbar>
       </AppBar>
       <TemporaryDrawer isOpen={isOpen} toggleDrawer={toggleDrawer} username={"juani"} role={"admin"}/>
