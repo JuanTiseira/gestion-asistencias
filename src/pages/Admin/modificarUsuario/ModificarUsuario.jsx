@@ -8,10 +8,6 @@ import Swal from 'sweetalert2';
 const ModificarUsuario = () => {
   const dispatch = useDispatch();
   const userData = useSelector(selectedUserData);
-
-
-  
-
   const onSubmit = (values) => {
     console.log("editar",values)
     dispatch(modifyUser(values)).then((result)=>{

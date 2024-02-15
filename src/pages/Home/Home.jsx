@@ -87,7 +87,8 @@ function Home() {
           </Grid>
           <Box height={20}> 
           {/* sx={{marginTop: "5px"}} */}
-          <Grid container spacing={2}>
+          <Grid container spacing={2} sx={{
+                    display: 'flex',}}>
             <Grid item xs={8}>
               <Card sx={{ height: 60 + "vh" }}>
                 <CardContent>

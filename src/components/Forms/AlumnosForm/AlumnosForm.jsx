@@ -7,16 +7,6 @@ import { Stack, Container, Paper, Typography, Box, Grid} from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import { useTheme } from '@emotion/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { 
-    getRoles, 
-    getRols, 
-    getFormData,  
-    changeFormData, 
-    createUser, 
-    errorUsers,
-    loadingUsers,
-    resultUsers,
-} from '@/features/users/usersSlice';
 import CustomMultipleSelect from '@/components/Select/CustomSelect';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '@/components/Spinners/Spinner';
@@ -25,7 +15,12 @@ import { Save } from '@mui/icons-material';
 import { Home } from '@mui/icons-material';
 import { Clear } from '@mui/icons-material';
 import { BackHand } from '@mui/icons-material';
-import CustomOneSelect from '@/components/Select/CustomOneSelect';
+import { FieldArray } from 'formik';
+import { selectCarreras, getCarreras, errorAlumnos, loadingalumnos, resultAlumnos } from '@/features/alumnos/alumnosSlice';
+import { Field } from 'formik';
+import { InputLabel } from '@mui/material';
+import { FormControlLabel } from '@mui/material';
+import { CheckBox } from '@mui/icons-material';
 const validationSchema = Yup.object({
   nombre: Yup.string().required('El nombre es requerido'),
   apellido: Yup.string().required('El apellido es requerido'),
@@ -36,18 +31,16 @@ const validationSchema = Yup.object({
   telefono: Yup.string().required('El teléfono es requerido'),
 });
 
-const UsuariosForm = ({ values, isEdit, onSubmit }) => {
+const AlumnosForm = ({ values, isEdit, onSubmit }) => {
     const dispatch = useDispatch();
-    const roles = useSelector(getRoles);
-    const formData = useSelector(getFormData);
+    const carreras = useSelector(selectCarreras);
+    // const formData = useSelector(getFormData);
     const navigate = useNavigate();
-    const error = useSelector(errorUsers);
-    const loading = useSelector(loadingUsers);
-    const result = useSelector(resultUsers);
-    const [empty, setEmpty] = useState(false);
+    const error = useSelector(errorAlumnos);
+    const loading = useSelector(loadingalumnos);
+    const result = useSelector(resultAlumnos);
 
-   
-    
+    const [carrerasAlumno, setCarrerasAlumno] = React.useState(values.carreras);
     const formik = useFormik({
     initialValues: values,
     validationSchema: validationSchema,
@@ -60,12 +53,10 @@ const UsuariosForm = ({ values, isEdit, onSubmit }) => {
   const theme = useTheme();  // Obtén el tema actual
   
 
-  useEffect(() => {
-    dispatch(getRols());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getCarreras());
+  // }, []);
   
-  
-
   useEffect(() => {
     if (error) {
       Swal.fire({
@@ -75,13 +66,31 @@ const UsuariosForm = ({ values, isEdit, onSubmit }) => {
       });
     }
   }, [error]);
+  
+  const handleChange = (event) => {
+    const nombre = event.target.value.slice(-1).pop();
+    const selectedCarrera = carreras.find((u) => u.nombre === nombre);
+    if (
+      selectedCarrera &&
+      !carrerasAlumno.some((carrera) => carrera.nombre === nombre)
+    ) {
+      console.log("if")
+      setCarrerasAlumno((prevArray) => [...prevArray, selectedCarrera]);
+      formik.setFieldValue("carreras", [...formik.values.carreras, selectedCarrera])
+    } else {
+      const updatedArray = carrerasAlumno.filter((p) => p.nombre !== nombre);
+      console.log("else")
+      setCarrerasAlumno((prevArray) => [...updatedArray]);
+      formik.setFieldValue("carreras", [...updatedArray])
 
+    }
+  };
   return (
     <Stack>
       {/* Contenido de la página */}
       <Box sx={{ textAlign: "center", margin: "25px" }}>
         <Typography variant="h1" sx={{ color: theme.palette.warning.main }}>
-          {isEdit? "Editar Usuario": "Agregar Usuario "}
+          {isEdit? "Editar Alumno": "Agregar Alumno "}
         </Typography>
       </Box>
 
@@ -170,38 +179,16 @@ const UsuariosForm = ({ values, isEdit, onSubmit }) => {
                 helperText={formik.touched.telefono && formik.errors.telefono}
               />
 
-              {roles && <CustomOneSelect
-                options={roles}
-                label="Selecciona un rol"
-                value={formik.values.rol.id}
-                onChange={(event) => {
-                    formik.setFieldValue('rol', event.target.value);
-                  }}
-                valueKey="id"
-                labelKey="nombre"
-              />}
-
-              <TextField
-                label="Usuario"
-                id="username"
-                name="username"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.username}
-                error={formik.touched.username && Boolean(formik.errors.username)}
-                helperText={formik.touched.username && formik.errors.username}
-              />
-
-              <TextField
-                label="Contraseña"
-                id="password"
-                name="password"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.password}
-                error={formik.touched.password && Boolean(formik.errors.password)}
-                helperText={formik.touched.password && formik.errors.password}
-              />
+              {carreras && (
+                <CustomMultipleSelect
+                  options={carreras}
+                  label="Selecciona una o varias carreras"
+                  value={carrerasAlumno} // Asegúrate de que el valor sea un array
+                  onChange={handleChange}
+                  valueKey="id"
+                  labelKey="nombre"
+                />
+              )}
               <Grid container 
                 sx={{
                     gap:2,
@@ -242,7 +229,7 @@ const UsuariosForm = ({ values, isEdit, onSubmit }) => {
                     startIcon={<Home />}
                     variant="contained"
                     color="secondary"
-                    onClick={() => navigate("/administracion")}
+                    onClick={() => navigate("/alumnos")}
                     sx={{ width: { xs: '100%', sm: 'auto' } }}
                   >
                     Volver
@@ -258,4 +245,4 @@ const UsuariosForm = ({ values, isEdit, onSubmit }) => {
   );
 };
 
-export default UsuariosForm;
+export default AlumnosForm;
