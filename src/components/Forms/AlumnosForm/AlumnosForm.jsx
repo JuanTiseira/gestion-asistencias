@@ -21,6 +21,7 @@ import { Field } from 'formik';
 import { InputLabel } from '@mui/material';
 import { FormControlLabel } from '@mui/material';
 import { CheckBox } from '@mui/icons-material';
+import MultipleAddSelect from '@/components/Select/MultipleAddSelect';
 const validationSchema = Yup.object({
   nombre: Yup.string().required('El nombre es requerido'),
   apellido: Yup.string().required('El apellido es requerido'),
@@ -44,19 +45,19 @@ const AlumnosForm = ({ values, isEdit, onSubmit }) => {
     const formik = useFormik({
     initialValues: values,
     validationSchema: validationSchema,
-    onSubmit: onSubmit, 
+    onSubmit: onSubmit,
   });
-  
+
   const handleReset = () => {
     formik.resetForm();
   };
   const theme = useTheme();  // Obtén el tema actual
-  
 
-  // useEffect(() => {
-  //   dispatch(getCarreras());
-  // }, []);
-  
+
+  useEffect(() => {
+    dispatch(getCarreras());
+  }, []);
+
   useEffect(() => {
     if (error) {
       Swal.fire({
@@ -66,7 +67,7 @@ const AlumnosForm = ({ values, isEdit, onSubmit }) => {
       });
     }
   }, [error]);
-  
+
   const handleChange = (event) => {
     const nombre = event.target.value.slice(-1).pop();
     const selectedCarrera = carreras.find((u) => u.nombre === nombre);
@@ -85,6 +86,33 @@ const AlumnosForm = ({ values, isEdit, onSubmit }) => {
 
     }
   };
+  const select = () =>{
+    if (isEdit) {
+      return (<CustomMultipleSelect
+         options={carreras}
+         label="Selecciona una o varias carreras"
+         value={carrerasAlumno} // Asegúrate de que el valor sea un array
+         onChange={handleChange}
+         valueKey="id"
+         labelKey="nombre"
+         />
+      )
+
+    }else{
+      return (<MultipleAddSelect
+        options={carreras}
+        label="Selecciona una o varias carreras"
+        id="carreras"
+        name="carreras"
+        value={Array.isArray(formik.values.carreras) ? formik.values.carreras : []}
+        onChange={(event) => {
+          formik.setFieldValue('carreras', event.target.value);
+        }}
+        valueKey="id"
+        labelKey="nombre"
+      />)
+    }
+  }
   return (
     <Stack>
       {/* Contenido de la página */}
@@ -95,7 +123,7 @@ const AlumnosForm = ({ values, isEdit, onSubmit }) => {
       </Box>
 
       <Container>
-       
+
         <Paper elevation={3} sx={{ padding: 3, borderRadius: 2 }}>
           <form onSubmit={formik.handleSubmit}>
             <Stack spacing={2}>
@@ -153,7 +181,7 @@ const AlumnosForm = ({ values, isEdit, onSubmit }) => {
                 value={formik.values.fecha_nacimiento}
                 error={formik.touched.fecha_nacimiento && Boolean(formik.errors.fecha_nacimiento)}
                 helperText={formik.touched.fecha_nacimiento && formik.errors.fecha_nacimiento}
-              
+
               />
 
               <TextField
@@ -179,17 +207,9 @@ const AlumnosForm = ({ values, isEdit, onSubmit }) => {
                 helperText={formik.touched.telefono && formik.errors.telefono}
               />
 
-              {carreras && (
-                <CustomMultipleSelect
-                  options={carreras}
-                  label="Selecciona una o varias carreras"
-                  value={carrerasAlumno} // Asegúrate de que el valor sea un array
-                  onChange={handleChange}
-                  valueKey="id"
-                  labelKey="nombre"
-                />
-              )}
-              <Grid container 
+
+                { carreras && select()}
+              <Grid container
                 sx={{
                     gap:2,
                     display: 'flex',
@@ -209,12 +229,12 @@ const AlumnosForm = ({ values, isEdit, onSubmit }) => {
                 </Grid>
                 <Grid item>
                   {isEdit ? (
-                    <Button 
-                      variant="contained" 
-                      color="error" 
-                      startIcon={<Clear />} 
-                      disabled 
-                      onClick={handleReset} 
+                    <Button
+                      variant="contained"
+                      color="error"
+                      startIcon={<Clear />}
+                      disabled
+                      onClick={handleReset}
                       sx={{ width: { xs: '100%', sm: 'auto' } }}>
                       Limpiar
                     </Button>
@@ -236,7 +256,7 @@ const AlumnosForm = ({ values, isEdit, onSubmit }) => {
                   </Button>
                 </Grid>
               </Grid>
-              
+
             </Stack>
           </form>
         </Paper>

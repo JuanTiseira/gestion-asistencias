@@ -185,7 +185,7 @@ export const alumnosSlice = createSlice({
   name: 'alumnos',
   initialState:{
     loading: false,
-    alumnos: null,
+    alumnos: [],
     alumno: null,
     materias: [],
     carreras: [],

@@ -2,8 +2,8 @@ import {Container, Stack} from '@mui/material';
 import AlumnosForm from '@/components/Forms/AlumnosForm/AlumnosForm';
 import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
-import { changeFormData, getAlumnos, createAlumno } from '@/features/alumnos/alumnosSlice';
-
+import { changeFormData, getAlumnos, createAlumno, getCarreras } from '@/features/alumnos/alumnosSlice';
+import { useEffect } from 'react';
 const AgregarAlumno = () => {
 
   const dispatch = useDispatch();
@@ -32,7 +32,7 @@ const AgregarAlumno = () => {
       }
     })
   }
-
+  
   return (
     <Stack>
       <Container>

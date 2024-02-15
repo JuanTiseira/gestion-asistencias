@@ -1,7 +1,7 @@
 import React from 'react';
 import { Select, MenuItem, InputLabel, FormControl, ListItemText } from '@mui/material';
 
-const CustomMultipleSelect = ({ options, label, value, onChange, valueKey, labelKey }) => {
+const CustomMultipleSelect = ({ options, label, value, onChange, valueKey, labelKey, id, name }) => {
   return (
     <FormControl fullWidth>
       <InputLabel>{label}</InputLabel>
@@ -10,6 +10,8 @@ const CustomMultipleSelect = ({ options, label, value, onChange, valueKey, label
         value={value}
         onChange={onChange}
         label={label}
+        id={id}
+        name={name}
         renderValue={(selected) => {
           return selected.map((s, index) => (
             <div key={index}>
