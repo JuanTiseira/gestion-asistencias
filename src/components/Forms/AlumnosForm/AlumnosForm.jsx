@@ -22,6 +22,9 @@ import { InputLabel } from '@mui/material';
 import { FormControlLabel } from '@mui/material';
 import { CheckBox } from '@mui/icons-material';
 import MultipleAddSelect from '@/components/Select/MultipleAddSelect';
+
+
+
 const validationSchema = Yup.object({
   nombre: Yup.string().required('El nombre es requerido'),
   apellido: Yup.string().required('El apellido es requerido'),
@@ -172,6 +175,7 @@ const AlumnosForm = ({ values, isEdit, onSubmit }) => {
               />
 
               <TextField
+                InputLabelProps={{ ...(formik.values.fecha_nacimiento == "" && { shrink: true }) }}
                 label="Fecha de Nacimiento"
                 id="fecha_nacimiento"
                 name="fecha_nacimiento"
