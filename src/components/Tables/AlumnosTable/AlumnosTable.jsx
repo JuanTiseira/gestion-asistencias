@@ -50,13 +50,16 @@ const AlumnosTable = ({ theme, data }) => {
       }
     });
   };
-
+  const processedData = data.map(alumno => ({
+    ...alumno,
+    carreras: alumno.carreras.map(carrera => carrera.nombre).join(', ')
+  }));
   const columns = [
     {
       name: "id",
       label: "ID",
       options: {
-        filter: true,
+        filter: false,
         sort: true,
       },
     },
@@ -80,14 +83,6 @@ const AlumnosTable = ({ theme, data }) => {
       name: "carreras",
       label: "Carrera",
       options: {
-        customBodyRender: (value) => (
-          <div>
-            {value.map(carrera => (
-              <div key={carrera.id}>{carrera.nombre}</div>
-            ))}
-          </div>
-        ),
-
         filter: true,
         sort: false,
       },
@@ -114,7 +109,7 @@ const AlumnosTable = ({ theme, data }) => {
       },
     },
   ];
-
+  
   const options = {
     filterType: 'checkbox',
     responsive: 'standard',
@@ -146,7 +141,7 @@ const AlumnosTable = ({ theme, data }) => {
       {data ? (
         <MUIDatatable
           title={"Lista de usuarios"}
-          data={data}
+          data={processedData}
           columns={columns}
           options={options}
         />
