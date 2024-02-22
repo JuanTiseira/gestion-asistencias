@@ -135,6 +135,9 @@ function UsuariosForm({ values, isEdit, onSubmit }) {
               />
 
               <TextField
+              InputLabelProps={{
+                ...(formik.values.fecha_nacimiento == '' && { shrink: true }),
+              }}
                 label="Fecha de Nacimiento"
                 id="fecha_nacimiento"
                 name="fecha_nacimiento"
