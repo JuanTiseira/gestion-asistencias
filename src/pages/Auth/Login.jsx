@@ -13,8 +13,8 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
-import AuthOutlet from './AuthOutlet';
 import { useDispatch, useSelector } from 'react-redux';
+import AuthOutlet from './AuthOutlet';
 import { loginUser, errorUser, loadingUser } from '@/features/user/userSlice';
 
 function Login() {
@@ -33,7 +33,6 @@ function Login() {
 
   const loginHandler = async (e) => {
     e.preventDefault();
-    console.log(username, password)
     if (username === '') {
       // Please enter your email.
       user.current.focus();
@@ -41,17 +40,17 @@ function Login() {
       // 'Please enter your password.'
       pass.current.focus();
     } else {
-
-      let userCredential={
-        username, password
-      }
-      dispatch(loginUser(userCredential)).then((result)=>{
-        if(result.payload){
+      const userCredential = {
+        username,
+        password,
+      };
+      dispatch(loginUser(userCredential)).then((result) => {
+        if (result.payload) {
           setEmail('');
           setPass('');
           navigate('/home');
         }
-      })
+      });
     }
   };
 
@@ -60,14 +59,14 @@ function Login() {
   }, []);
 
   return (
-    <AuthOutlet header={"Bienvenido de nuevo!"}>
+    <AuthOutlet header="Bienvenido de nuevo!">
       <TextField
         inputRef={user}
         type="text"
         label="Usuario"
         variant="outlined"
         autoComplete="off"
-        onChange={(e)=>setEmail(e.target.value)}
+        onChange={(e) => setEmail(e.target.value)}
       />
       <Stack gap={1}>
         <TextField
@@ -75,7 +74,7 @@ function Login() {
           type={showPassword ? 'text' : 'password'}
           label="Constraseña"
           variant="outlined"
-          onChange={(e)=>setPass(e.target.value)}
+          onChange={(e) => setPass(e.target.value)}
           sx={{ '& .MuiInputBase-root ': { pr: '4px' } }}
           autoComplete="new-password"
           InputProps={{
@@ -94,9 +93,9 @@ function Login() {
           }}
         />
         <Button variant="contained" onClick={loginHandler}>
-          {loading?"Iniciando sesion...":"Iniciar sesion"}
+          {loading ? 'Iniciando sesion...' : 'Iniciar sesion'}
         </Button>
-      {error&&(<Alert severity="error">{error}</Alert>)}
+        {error && <Alert severity="error">{error}</Alert>}
       </Stack>
     </AuthOutlet>
   );

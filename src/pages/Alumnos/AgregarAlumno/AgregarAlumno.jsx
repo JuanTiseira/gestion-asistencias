@@ -1,13 +1,18 @@
-import {Container, Stack} from '@mui/material';
-import AlumnosForm from '@/components/Forms/AlumnosForm/AlumnosForm';
+import { Container, Stack } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
-import { changeFormData, getAlumnos, createAlumno, getCarreras } from '@/features/alumnos/alumnosSlice';
 import { useEffect } from 'react';
-const AgregarAlumno = () => {
+import {
+  changeFormData,
+  getAlumnos,
+  createAlumno,
+  getCarreras,
+} from '@/features/alumnos/alumnosSlice';
+import AlumnosForm from '@/components/Forms/AlumnosForm/AlumnosForm';
 
+function AgregarAlumno() {
   const dispatch = useDispatch();
-  const values =  {
+  const values = {
     nombre: '',
     apellido: '',
     dni: '',
@@ -16,13 +21,13 @@ const AgregarAlumno = () => {
     email: '',
     telefono: '',
     carreras: '',
-  }
+  };
   const onSubmit = (values) => {
-    console.log("agregar",values)
+    console.log('agregar', values);
     dispatch(changeFormData(values));
-    dispatch(createAlumno(values)).then((result)=>{
-      if(result.payload){
-        console.log(result.payload.message)
+    dispatch(createAlumno(values)).then((result) => {
+      if (result.payload) {
+        console.log(result.payload.message);
         dispatch(getAlumnos());
         Swal.fire({
           icon: 'success',
@@ -30,16 +35,16 @@ const AgregarAlumno = () => {
           text: result.payload.message,
         });
       }
-    })
-  }
-  
+    });
+  };
+
   return (
     <Stack>
       <Container>
-          <AlumnosForm values={values} isEdit={false} onSubmit={onSubmit}></AlumnosForm>
+        <AlumnosForm values={values} isEdit={false} onSubmit={onSubmit} />
       </Container>
     </Stack>
   );
-};
+}
 
 export default AgregarAlumno;

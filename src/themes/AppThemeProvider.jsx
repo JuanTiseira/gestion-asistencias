@@ -14,7 +14,7 @@ function AppThemeProvider({ children }) {
       palette: {
         mode,
         primary: {
-          main: '#ffffff', //or 1c9c7c
+          main: '#ffffff', // or 1c9c7c
         },
         secondary: {
           main: '#9DF3C4',
@@ -26,6 +26,14 @@ function AppThemeProvider({ children }) {
           Base: '#404446',
           Light: '#6C7072',
           Lighter: '#72777A',
+        },
+        Blue: {
+          Darkest: '#001a33',
+          Darker: '#003366',
+          Dark: '#0059b3',
+          Base: '#007acc',
+          Light: '#33a6cc',
+          Lighter: '#66b3cc',
         },
         Sky: {
           Dark: '#979C9E',
@@ -50,6 +58,14 @@ function AppThemeProvider({ children }) {
           Light: '#1EB01E',
           Lighter: '#7FF77F',
           Lightest: '#E5FFE5',
+        },
+        Yellow: {
+          Darkest: '#9c8300',
+          Darker: '#bf9b00',
+          Dark: '#e6be00',
+          Base: '#fddb3a',
+          Light: '#ffeb6b',
+          Lighter: '#fff589',
         },
         background: {
           default: mode === 'dark' ? '#000000' : '#FCFBFA',
@@ -83,9 +99,8 @@ function AppThemeProvider({ children }) {
 
       typography: {
         // fontFamily: 'Dosis, sans-serif',
-        // fontFamily: 'Roboto, sans-serif',
-        fontFamily: 'Nunito, sans-serif',
-
+        fontFamily: 'Ubuntu, sans-serif',
+        // fontFamily: 'Nunito, sans-serif',
 
         h1: {
           fontSize: '26px',

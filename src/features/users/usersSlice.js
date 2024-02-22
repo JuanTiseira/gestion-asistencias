@@ -28,7 +28,7 @@ export const deleteUser = createAsyncThunk(
       const response = await axios.delete(deleteUserUrl(userId), config);
       return response.data;
     } catch (error) {
-      console.log(error.response.data.error)
+      console.log(error.response.data.error);
       if (error.response) {
         throw new Error(error.response.data.error || 'Error desconocido');
       } else if (error.request) {
@@ -37,7 +37,7 @@ export const deleteUser = createAsyncThunk(
         throw new Error('Error al configurar la solicitud');
       }
     }
-  }
+  },
 );
 
 export const createUser = createAsyncThunk(
@@ -55,7 +55,7 @@ export const createUser = createAsyncThunk(
       const response = await axios.post(usersUrl, userData, config);
       return response.data;
     } catch (error) {
-      console.log(error.response.data.error)
+      console.log(error.response.data.error);
       if (error.response) {
         // Si hay una respuesta del servidor con un mensaje de error personalizado
         throw new Error(error.response.data.error || 'Error desconocido');
@@ -67,9 +67,8 @@ export const createUser = createAsyncThunk(
         throw new Error('Error al configurar la solicitud');
       }
     }
-  }
+  },
 );
-
 
 export const modifyUser = createAsyncThunk(
   'users/modifyUser',
@@ -86,7 +85,7 @@ export const modifyUser = createAsyncThunk(
       const response = await axios.post(usersModifyUrl, userData, config);
       return response.data;
     } catch (error) {
-      console.log(error.response.data.error)
+      console.log(error.response.data.error);
       if (error.response) {
         // Si hay una respuesta del servidor con un mensaje de error personalizado
         throw new Error(error.response.data.error || 'Error desconocido');
@@ -98,55 +97,50 @@ export const modifyUser = createAsyncThunk(
         throw new Error('Error al configurar la solicitud');
       }
     }
-  }
+  },
 );
-
 
 export const getUsers = createAsyncThunk(
   'users/getUsers',
-  async(_, { getState })=>{
-    const state = getState()
+  async (_, { getState }) => {
+    const state = getState();
     const config = {
-        headers: {
-          Authorization: `token ${state.user.user.token}`,
-        },
-      };
-    const request = await axios.get(usersUrl, config)
+      headers: {
+        Authorization: `token ${state.user.user.token}`,
+      },
+    };
+    const request = await axios.get(usersUrl, config);
     const response = await request.data;
-    return response
-  }
-)
+    return response;
+  },
+);
 
 export const getRols = createAsyncThunk(
   'users/getRols',
-  async(_, { getState })=>{
-    const state = getState()
+  async (_, { getState }) => {
+    const state = getState();
 
     const config = {
-        headers: {
-          Authorization: `token ${state.user.user.token}`,
-        },
-      };
-    const request = await axios.get(rolsUrl, config)
+      headers: {
+        Authorization: `token ${state.user.user.token}`,
+      },
+    };
+    const request = await axios.get(rolsUrl, config);
     const response = await request.data;
 
-    return response
-  }
-)
+    return response;
+  },
+);
 
-export const logoutUser = createAsyncThunk(
-  'user/logoutUser', async () => {
+export const logoutUser = createAsyncThunk('user/logoutUser', async () => {
   localStorage.removeItem('user');
   localStorage.removeItem('token');
   localStorage.removeItem('rol');
 });
 
-
-
-
 export const usersSlice = createSlice({
   name: 'users',
-  initialState:{
+  initialState: {
     loading: false,
     users: null,
     roles: [],
@@ -155,7 +149,7 @@ export const usersSlice = createSlice({
     selectedUser: null,
     formData: '',
   },
-  reducers:{
+  reducers: {
     changeFormData: (state, action) => {
       state.formData = action.payload;
     },
@@ -163,72 +157,71 @@ export const usersSlice = createSlice({
       state.selectedUser = action.payload;
     },
   },
-  extraReducers:(builder)=>{
+  extraReducers: (builder) => {
     builder
-    //view usuarios
-    .addCase(getUsers.pending,(state)=>{
-      state.loading = true;
-      state.users = null;
-      state.error = null;
-    })
-    .addCase(getUsers.fulfilled,(state, action)=>{
-      state.loading = false;
-      state.users = action.payload;
-      state.error = null;
-    })
-    .addCase(getUsers.rejected,(state, action)=>{
-      state.loading = false; 
-      state.users = null;
-      console.log(action.error.message);
-      if(action.error.message === 'Request failed with status code 403'){
-        state.error = 'Acceso denegado! credenciales incorrectas'
-      }else{
-        state.error = action.error.message;
-      }
-    })
-    //view roles
-    builder.addCase(getRols.pending,(state)=>{
+      // view usuarios
+      .addCase(getUsers.pending, (state) => {
+        state.loading = true;
+        state.users = null;
+        state.error = null;
+      })
+      .addCase(getUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+        state.error = null;
+      })
+      .addCase(getUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.users = null;
+        console.log(action.error.message);
+        if (action.error.message === 'Request failed with status code 403') {
+          state.error = 'Acceso denegado! credenciales incorrectas';
+        } else {
+          state.error = action.error.message;
+        }
+      });
+    // view roles
+    builder.addCase(getRols.pending, (state) => {
       state.loading = true;
       state.roles = null;
       state.error = null;
-    })
-    builder.addCase(getRols.fulfilled,(state, action)=>{
+    });
+    builder.addCase(getRols.fulfilled, (state, action) => {
       state.loading = false;
       state.roles = action.payload;
       state.error = null;
-    })
-    builder.addCase(getRols.rejected,(state, action)=>{
-      state.loading = false; 
+    });
+    builder.addCase(getRols.rejected, (state, action) => {
+      state.loading = false;
       state.roles = null;
       console.log(action.error.message);
-      if(action.error.message === 'Request failed with status code 403'){
-        state.error = 'Acceso denegado! credenciales incorrectas'
-      }else{
+      if (action.error.message === 'Request failed with status code 403') {
+        state.error = 'Acceso denegado! credenciales incorrectas';
+      } else {
         state.error = action.error.message;
       }
-    })
-    //create users
+    });
+    // create users
     builder.addCase(createUser.pending, (state) => {
       // Acciones cuando la solicitud está en curso
       state.loading = true;
       state.error = null;
-      state.result = null
-
-    })
+      state.result = null;
+    });
     builder.addCase(createUser.fulfilled, (state, action) => {
       // Acciones cuando la solicitud es exitosa
       state.loading = false;
       state.users.push(action.payload); // Asumiendo que el servidor devuelve el nuevo usuario
       state.error = null;
       state.result = action.payload.message;
-    })
+    });
 
     builder.addCase(createUser.rejected, (state, action) => {
       // Acciones cuando la solicitud falla
       state.loading = false;
-      console.log(action.error.message)
-      state.error = action.error.message
-      state.result = null
+      console.log(action.error.message);
+      state.error = action.error.message;
+      state.result = null;
     });
 
     // deleteUser reducer
@@ -237,15 +230,15 @@ export const usersSlice = createSlice({
       state.loading = true;
       state.error = null;
       state.result = null;
-    })
+    });
     builder.addCase(deleteUser.fulfilled, (state, action) => {
       // Acciones cuando la solicitud es exitosa
       state.loading = false;
       // Filtrar el usuario eliminado
-      state.users = state.users.filter(user => user.id !== action.meta.arg);
+      state.users = state.users.filter((user) => user.id !== action.meta.arg);
       state.error = null;
       state.result = action.payload.message;
-    })
+    });
     builder.addCase(deleteUser.rejected, (state, action) => {
       // Acciones cuando la solicitud falla
       state.loading = false;
@@ -253,31 +246,30 @@ export const usersSlice = createSlice({
       state.error = action.error.message;
       state.result = null;
     });
-    //modify users
+    // modify users
     builder.addCase(modifyUser.pending, (state) => {
       // Acciones cuando la solicitud está en curso
       state.loading = true;
       state.error = null;
-      state.result = null
-
-    })
+      state.result = null;
+    });
     builder.addCase(modifyUser.fulfilled, (state, action) => {
       // Acciones cuando la solicitud es exitosa
       state.loading = false;
       state.users.push(action.payload); // Asumiendo que el servidor devuelve el nuevo usuario
       state.error = null;
       state.result = action.payload.message;
-    })
+    });
 
     builder.addCase(modifyUser.rejected, (state, action) => {
       // Acciones cuando la solicitud falla
       state.loading = false;
-      console.log(action.error.message)
-      state.error = action.error.message
-      state.result = null
+      console.log(action.error.message);
+      state.error = action.error.message;
+      state.result = null;
     });
-  }
-})
+  },
+});
 
 export const selectUsers = (state) => state.users.users;
 export const errorUsers = (state) => state.users.error;
@@ -287,6 +279,5 @@ export const getFormData = (state) => state.users.formData;
 export const getRoles = (state) => state.users.roles;
 export const selectedUserData = (state) => state.users.selectedUser;
 
-export const { changeFormData, selectedUser } =
-  usersSlice.actions;
+export const { changeFormData, selectedUser } = usersSlice.actions;
 export default usersSlice.reducer;

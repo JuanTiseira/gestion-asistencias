@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const Spinner = () => {
+function Spinner() {
   const [showSpinner, setShowSpinner] = useState(true);
 
   useEffect(() => {
@@ -14,10 +14,17 @@ const Spinner = () => {
   }, []); // El array vacío asegura que useEffect se ejecute solo una vez al montar el componente
 
   return showSpinner ? (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+      }}
+    >
       <CircularProgress />
     </div>
   ) : null;
-};
+}
 
 export default Spinner;

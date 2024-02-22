@@ -1,19 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, TableContainer, Paper, Button, Stack, IconButton } from '@mui/material';
+import {
+  Typography,
+  TableContainer,
+  Paper,
+  Button,
+  Stack,
+  IconButton,
+} from '@mui/material';
 import MUIDatatable from 'mui-datatables';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUsers, getUsers, deleteUser, loadingUsers, selectedUser } from '@/features/users/usersSlice';
-import CustomToolbarSelect from './CustomToolBarSelect';
-import Spinner from '@/components/Spinners/Spinner';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
-
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import Spinner from '@/components/Spinners/Spinner';
+import CustomToolbarSelect from './CustomToolBarSelect';
+import {
+  selectUsers,
+  getUsers,
+  deleteUser,
+  loadingUsers,
+  selectedUser,
+} from '@/features/users/usersSlice';
 
-
-const AdminTable = ({ theme, usersData }) => {
+function AdminTable({ theme, usersData }) {
   const dispatch = useDispatch();
   // const usersData = useSelector(selectUsers);
   const loading = useSelector(loadingUsers);
@@ -21,20 +32,19 @@ const AdminTable = ({ theme, usersData }) => {
   const navigate = useNavigate();
   const handle = () => {
     dispatch(getUsers());
-  }
+  };
 
   const handleModificar = (userId) => {
-    console.log("Modificar usuafdfdrio con ID:", userId);
-  
+    console.log('Modificar usuafdfdrio con ID:', userId);
+
     const selectedUserData = usersData.find((user) => user.id === userId);
-    console.log("Usuario seleccionado:", selectedUserData);
+    console.log('Usuario seleccionado:', selectedUserData);
     dispatch(selectedUser(selectedUserData));
-    navigate("/administracion/editar-usuario");
+    navigate('/administracion/editar-usuario');
   };
-  
+
   const handleEliminar = (userId) => {
     setSelectedUserId(userId);
- 
 
     Swal.fire({
       title: 'Confirmar eliminación',
@@ -51,7 +61,11 @@ const AdminTable = ({ theme, usersData }) => {
           dispatch(getUsers());
 
           // Mostrar una alerta de éxito con SweetAlert2
-          Swal.fire('Eliminado', `Usuario con ID ${userId} eliminado con éxito.`, 'success');
+          Swal.fire(
+            'Eliminado',
+            `Usuario con ID ${userId} eliminado con éxito.`,
+            'success',
+          );
         });
       }
     });
@@ -59,48 +73,48 @@ const AdminTable = ({ theme, usersData }) => {
 
   const columns = [
     {
-      name: "id",
-      label: "ID",
+      name: 'id',
+      label: 'ID',
       options: {
         filter: true,
         sort: true,
       },
     },
     {
-      name: "nombre",
-      label: "Nombre",
+      name: 'nombre',
+      label: 'Nombre',
       options: {
         filter: true,
         sort: false,
       },
     },
     {
-      name: "apellido",
-      label: "Apellido",
+      name: 'apellido',
+      label: 'Apellido',
       options: {
         filter: true,
         sort: false,
       },
     },
     {
-      name: "telefono",
-      label: "Telefono",
+      name: 'telefono',
+      label: 'Telefono',
       options: {
         filter: true,
         sort: false,
       },
     },
     {
-      name: "email",
-      label: "Email",
+      name: 'email',
+      label: 'Email',
       options: {
         filter: true,
         sort: false,
       },
     },
     {
-      name: "rol",
-      label: "Rol",
+      name: 'rol',
+      label: 'Rol',
       options: {
         customBodyRender: (value) => value.nombre,
         filter: true,
@@ -108,24 +122,31 @@ const AdminTable = ({ theme, usersData }) => {
       },
     },
     {
-      name: "acciones",
-      label: "Acciones",
+      name: 'acciones',
+      label: 'Acciones',
       options: {
         filter: false,
         sort: false,
-        customBodyRender: (value, tableMeta) => {
-          return (
-            <div>
-            <IconButton variant="outlined" aria-label="editar" color="warning" onClick={() => handleModificar(tableMeta.rowData[0])}>
+        customBodyRender: (value, tableMeta) => (
+          <div>
+            <IconButton
+              variant="outlined"
+              aria-label="editar"
+              color="warning"
+              onClick={() => handleModificar(tableMeta.rowData[0])}
+            >
               <EditIcon />
             </IconButton>
-            <IconButton variant="outlined" aria-label="eliminar" color="error" onClick={() => handleEliminar(tableMeta.rowData[0])}>
+            <IconButton
+              variant="outlined"
+              aria-label="eliminar"
+              color="error"
+              onClick={() => handleEliminar(tableMeta.rowData[0])}
+            >
               <DeleteIcon />
             </IconButton>
-            </div>
-            
-          );
-        },
+          </div>
+        ),
       },
     },
   ];
@@ -151,27 +172,24 @@ const AdminTable = ({ theme, usersData }) => {
     }
   }, [dispatch, usersData]);
 
-  
   return (
     <Stack>
       <Paper>
-      <TableContainer component={Paper}>
-      
-      {usersData ? (
-        <MUIDatatable
-          title={"Lista de usuarios"}
-          data={usersData}
-          columns={columns}
-          options={options}
-        />
-      ) : (
-        <Spinner></Spinner>
-      )}
-    </TableContainer>
-    </Paper>
+        <TableContainer component={Paper}>
+          {usersData ? (
+            <MUIDatatable
+              title="Lista de usuarios"
+              data={usersData}
+              columns={columns}
+              options={options}
+            />
+          ) : (
+            <Spinner />
+          )}
+        </TableContainer>
+      </Paper>
     </Stack>
-    
   );
-};
+}
 
 export default AdminTable;

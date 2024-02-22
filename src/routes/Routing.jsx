@@ -11,40 +11,48 @@ import ModificarUsuario from '@/pages/Admin/modificarUsuario/ModificarUsuario';
 import Alumnos from '@/pages/Alumnos/Alumnos';
 import ModificarAlumno from '@/pages/Alumnos/modificarAlumno/ModificarAlumno';
 import AgregarAlumno from '@/pages/Alumnos/AgregarAlumno/AgregarAlumno';
+import Asistencias from '@/pages/Asistencias/Asistencias';
+
 function Routing() {
-
- 
-
   return (
     <Routes>
-      <Route element={<ProtectedRoute/>}>
+      <Route element={<ProtectedRoute />}>
         <Route path="/" element={<Home />} />
       </Route>
-      <Route element={<ProtectedRoute/>}>
+      <Route element={<ProtectedRoute />}>
         <Route path="/home" element={<Home />} />
       </Route>
-      <Route element={<ProtectedRoute/>}>
-        <Route path="/asistencias" element={<Dashboard />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="/asistencias" element={<Asistencias />} />
       </Route>
-      <Route element={<ProtectedRoute/>}>
+      <Route element={<ProtectedRoute />}>
         <Route path="/administracion" element={<Admin />} />
       </Route>
-      <Route element={<ProtectedRoute/>}>
-        <Route path="/administracion/agregar-usuario" element={<AgregarUsuario />} />
+      <Route element={<ProtectedRoute />}>
+        <Route
+          path="/administracion/agregar-usuario"
+          element={<AgregarUsuario />}
+        />
       </Route>
-      <Route element={<ProtectedRoute/>}>
-        <Route path="/administracion/editar-usuario" element={<ModificarUsuario />} />
+      <Route element={<ProtectedRoute />}>
+        <Route
+          path="/administracion/editar-usuario"
+          element={<ModificarUsuario />}
+        />
       </Route>
-      <Route element={<ProtectedRoute/>}>
+      <Route element={<ProtectedRoute />}>
         <Route path="/alumnos" element={<Alumnos />} />
       </Route>
-      <Route element={<ProtectedRoute/>}>
+      <Route element={<ProtectedRoute />}>
         <Route path="/alumnos/agregar-alumno" element={<AgregarAlumno />} />
       </Route>
-      <Route element={<ProtectedRoute/>}>
-        <Route path="/alumnos/editar-alumno/:alumnoId" element={<ModificarAlumno />} />
+      <Route element={<ProtectedRoute />}>
+        <Route
+          path="/alumnos/editar-alumno/:alumnoId"
+          element={<ModificarAlumno />}
+        />
       </Route>
-      
+
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
     </Routes>

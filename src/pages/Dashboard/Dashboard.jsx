@@ -1,64 +1,53 @@
-import React from 'react'
-import { Container, Stack, Grid} from '@mui/material'
-import SimpleMenu from '@/components/Menu/Menu'
-const Dashboard = () => {
+import React from 'react';
+import { Container, Stack, Grid } from '@mui/material';
+import SimpleMenu from '@/components/Menu/Menu';
+
+function Dashboard() {
   return (
-    <Container fixed
+    <Container
+      fixed
       sx={{
-        display:"flex",
-        alignItems:"center",
-        justifyContent:"center",
-        flexDirection: "column"
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
       }}
     >
       <Container
         sx={{
+          p: 2,
+          boxShadow: 3,
+          borderRadius: 2,
+          backgroundColor: 'grey.50',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
+        }}
+      >
+        <Stack
+          sx={{
             p: 2,
             boxShadow: 3,
             borderRadius: 2,
-            backgroundColor: 'grey.50',
-            margin:"10px",
-            }}
-      >
-        <SimpleMenu></SimpleMenu>
-      </Container>
-
-      <Container
-      sx={{
-        p: 2,
-        boxShadow: 3,
-        borderRadius: 2,
-        backgroundColor: 'grey.50',
-        display:"flex",
-        alignItems:"center",
-        justifyContent:"center",
-        flexDirection: "column",
-      }}>
-        <Stack 
+            backgroundColor: 'grey.100',
+            color: 'white',
+          }}
+        />
+        <Stack
           sx={{
-              p: 2,
-              boxShadow: 3,
-              borderRadius: 2,
-              backgroundColor: 'grey.100',
-              color: "white",
-            }}>
-            Holassssssssssssssssssssssssssssss
-        </Stack>
-        <Stack 
-          sx={{
-              p: 2,
-              boxShadow: 3,
-              borderRadius: 2,
-              backgroundColor: 'grey.100',
-              color: "white",
-            }}
+            p: 2,
+            boxShadow: 3,
+            borderRadius: 2,
+            backgroundColor: 'grey.100',
+            color: 'white',
+          }}
         >
           Hola
         </Stack>
       </Container>
-        
     </Container>
-  )
+  );
 }
 
-export default Dashboard
+export default Dashboard;

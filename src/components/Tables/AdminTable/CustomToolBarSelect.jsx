@@ -1,7 +1,15 @@
-import React from "react";
-import { Button } from "@mui/material";
-const CustomToolbarSelect = ({ selectedRows, displayData, setSelectedRows, handleModificar }) => {
-  const selectedRowsIds = selectedRows.data.map(item => displayData[item.index].data[0]);
+import React from 'react';
+import { Button } from '@mui/material';
+
+function CustomToolbarSelect({
+  selectedRows,
+  displayData,
+  setSelectedRows,
+  handleModificar,
+}) {
+  const selectedRowsIds = selectedRows.data.map(
+    (item) => displayData[item.index].data[0],
+  );
 
   const handleModificarClick = () => {
     // Puedes realizar acciones específicas para la modificación aquí
@@ -14,6 +22,6 @@ const CustomToolbarSelect = ({ selectedRows, displayData, setSelectedRows, handl
       <Button onClick={handleModificarClick}>Eliminar seleccionados</Button>
     </div>
   );
-};
+}
 
 export default CustomToolbarSelect;

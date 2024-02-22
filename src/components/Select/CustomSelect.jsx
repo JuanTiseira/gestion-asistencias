@@ -1,29 +1,41 @@
 import React from 'react';
-import { Select, MenuItem, InputLabel, FormControl, ListItemText } from '@mui/material';
+import {
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  ListItemText,
+} from '@mui/material';
 
-const CustomMultipleSelect = ({ options, label, value, onChange, valueKey, labelKey, id, name }) => {
+function CustomMultipleSelect({
+  options,
+  label,
+  value,
+  onChange,
+  valueKey,
+  labelKey,
+  id,
+  name,
+}) {
   return (
     <FormControl fullWidth>
       <InputLabel>{label}</InputLabel>
       <Select
-        multiple  // Habilita la selección múltiple
+        multiple // Habilita la selección múltiple
         value={value}
         onChange={onChange}
         label={label}
         id={id}
         name={name}
-        renderValue={(selected) => {
-          return selected.map((s, index) => (
+        renderValue={(selected) =>
+          selected.map((s, index) => (
             <div key={index}>
-              <MenuItem key={"menuItem" + index} value={s.id}>
-                <ListItemText
-                  key={"listItemText" + index}
-                  primary={s.nombre}
-                />
+              <MenuItem key={`menuItem${index}`} value={s.id}>
+                <ListItemText key={`listItemText${index}`} primary={s.nombre} />
               </MenuItem>
             </div>
-            ));
-          }}
+          ))
+        }
       >
         {options.map((option) => (
           <MenuItem key={option.id} value={option.nombre}>
@@ -33,6 +45,6 @@ const CustomMultipleSelect = ({ options, label, value, onChange, valueKey, label
       </Select>
     </FormControl>
   );
-};
+}
 
 export default CustomMultipleSelect;

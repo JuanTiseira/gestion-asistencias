@@ -13,6 +13,7 @@ import {
   selectUsers,
 } from '@/features/users/usersSlice';
 import Spinner from '@/components/Spinners/Spinner';
+import SearchForm from '@/components/Forms/Asistencias/SearchForm/SearchForm';
 
 function Admin() {
   const theme = useTheme();
@@ -23,6 +24,7 @@ function Admin() {
   const initialData = {
     name: 'John Doe',
   };
+  const [data, setData] = useState(initialData);
   const dispatch = useDispatch();
   const formData = useSelector(getFormData);
 
@@ -57,7 +59,7 @@ function Admin() {
       {loading && <Spinner />}
       {/* Contenido de la página */}
       <Box sx={{ textAlign: 'center', marginY: 3 }}>
-        <Typography variant="sectionTitle">Administracion</Typography>
+        <Typography variant="sectionTitle">Asistencias</Typography>
       </Box>
 
       <Box
@@ -74,8 +76,19 @@ function Admin() {
           color="success"
           onClick={() => navigate('/administracion/agregar-usuario')}
         >
-          Agregar usuario
+          Agregar asistencias
         </Button>
+      </Box>
+      <Box
+        sx={{
+          p: 2,
+          boxShadow: 3,
+          borderRadius: 2,
+          backgroundColor: 'grey.200',
+          marginBottom: '20px',
+        }}
+      >
+        <SearchForm />
       </Box>
       <Stack
         sx={{

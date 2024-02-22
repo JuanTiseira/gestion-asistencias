@@ -32,7 +32,7 @@ export const deleteAlumno = createAsyncThunk(
       const response = await axios.delete(AlumnoUrlId(alumnoId), config);
       return response.data;
     } catch (error) {
-      console.log(error.response.data.error)
+      console.log(error.response.data.error);
       if (error.response) {
         throw new Error(error.response.data.error || 'Error desconocido');
       } else if (error.request) {
@@ -41,7 +41,7 @@ export const deleteAlumno = createAsyncThunk(
         throw new Error('Error al configurar la solicitud');
       }
     }
-  }
+  },
 );
 
 export const getAlumnoById = createAsyncThunk(
@@ -59,7 +59,7 @@ export const getAlumnoById = createAsyncThunk(
       const response = await axios.get(AlumnoUrlId(alumnoId), config);
       return response.data;
     } catch (error) {
-      console.log(error.response.data.error)
+      console.log(error.response.data.error);
       if (error.response) {
         throw new Error(error.response.data.error || 'Error desconocido');
       } else if (error.request) {
@@ -68,7 +68,7 @@ export const getAlumnoById = createAsyncThunk(
         throw new Error('Error al configurar la solicitud');
       }
     }
-  }
+  },
 );
 
 export const createAlumno = createAsyncThunk(
@@ -84,10 +84,10 @@ export const createAlumno = createAsyncThunk(
 
     try {
       const response = await axios.post(alumnoUrl, alumnoData, config);
-      console.log(response.data)
+      console.log(response.data);
       return response.data;
     } catch (error) {
-      console.log(error.response.data.error)
+      console.log(error.response.data.error);
       if (error.response) {
         // Si hay una respuesta del servidor con un mensaje de error personalizado
         throw new Error(error.response.data.error || 'Error desconocido');
@@ -99,9 +99,8 @@ export const createAlumno = createAsyncThunk(
         throw new Error('Error al configurar la solicitud');
       }
     }
-  }
+  },
 );
-
 
 export const modifyAlumno = createAsyncThunk(
   'alumnos/modifyAlumno',
@@ -118,7 +117,7 @@ export const modifyAlumno = createAsyncThunk(
       const response = await axios.post(alumnoModifyUrl, alumnoData, config);
       return response.data;
     } catch (error) {
-      console.log(error.response.data.error)
+      console.log(error.response.data.error);
       if (error.response) {
         // Si hay una respuesta del servidor con un mensaje de error personalizado
         throw new Error(error.response.data.error || 'Error desconocido');
@@ -130,60 +129,59 @@ export const modifyAlumno = createAsyncThunk(
         throw new Error('Error al configurar la solicitud');
       }
     }
-  }
+  },
 );
-
 
 export const getAlumnos = createAsyncThunk(
   'alumnos/getAlumnos',
-  async(_, { getState })=>{
-    const state = getState()
+  async (_, { getState }) => {
+    const state = getState();
     const config = {
-        headers: {
-          Authorization: `token ${state.user.user.token}`,
-        },
-      };
-    const request = await axios.get(alumnoUrl, config)
+      headers: {
+        Authorization: `token ${state.user.user.token}`,
+      },
+    };
+    const request = await axios.get(alumnoUrl, config);
     const response = await request.data;
-    return response
-  }
-)
+    return response;
+  },
+);
 
 export const getCarreras = createAsyncThunk(
   'alumnos/getCarreras',
-  async(_, { getState })=>{
-    const state = getState()
+  async (_, { getState }) => {
+    const state = getState();
 
     const config = {
-        headers: {
-          Authorization: `token ${state.user.user.token}`,
-        },
-      };
-    const request = await axios.get(carrerasUrl, config)
+      headers: {
+        Authorization: `token ${state.user.user.token}`,
+      },
+    };
+    const request = await axios.get(carrerasUrl, config);
     const response = await request.data;
 
-    return response
-  }
-)
+    return response;
+  },
+);
 export const getMaterias = createAsyncThunk(
-    'alumnos/getMaterias',
-    async(_, { getState })=>{
-      const state = getState()
-  
-      const config = {
-          headers: {
-            Authorization: `token ${state.user.user.token}`,
-          },
-        };
-      const request = await axios.get(materiasUrl, config)
-      const response = await request.data;
-  
-      return response
-    }
-  )
+  'alumnos/getMaterias',
+  async (_, { getState }) => {
+    const state = getState();
+
+    const config = {
+      headers: {
+        Authorization: `token ${state.user.user.token}`,
+      },
+    };
+    const request = await axios.get(materiasUrl, config);
+    const response = await request.data;
+
+    return response;
+  },
+);
 export const alumnosSlice = createSlice({
   name: 'alumnos',
-  initialState:{
+  initialState: {
     loading: false,
     alumnos: [],
     alumno: null,
@@ -194,7 +192,7 @@ export const alumnosSlice = createSlice({
     selectedAlumno: null,
     formData: '',
   },
-  reducers:{
+  reducers: {
     changeFormData: (state, action) => {
       state.formData = action.payload;
     },
@@ -202,94 +200,93 @@ export const alumnosSlice = createSlice({
       state.selectedAlumno = action.payload;
     },
   },
-  extraReducers:(builder)=>{
+  extraReducers: (builder) => {
     builder
-    //view alumnos
-    .addCase(getAlumnos.pending,(state)=>{
-      state.loading = true;
-      state.alumnos = null;
-      state.error = null;
-    })
-    .addCase(getAlumnos.fulfilled,(state, action)=>{
-      state.loading = false;
-      state.alumnos = action.payload;
-      state.error = null;
-    })
-    .addCase(getAlumnos.rejected,(state, action)=>{
-      state.loading = false; 
-      state.alumnos = null;
-      console.log(action.error.message);
-      if(action.error.message === 'Request failed with status code 403'){
-        state.error = 'Acceso denegado! credenciales incorrectas'
-      }else{
-        state.error = action.error.message;
-      }
-    })
-    //view carreras
-    builder.addCase(getCarreras.pending,(state)=>{
+      // view alumnos
+      .addCase(getAlumnos.pending, (state) => {
+        state.loading = true;
+        state.alumnos = null;
+        state.error = null;
+      })
+      .addCase(getAlumnos.fulfilled, (state, action) => {
+        state.loading = false;
+        state.alumnos = action.payload;
+        state.error = null;
+      })
+      .addCase(getAlumnos.rejected, (state, action) => {
+        state.loading = false;
+        state.alumnos = null;
+        console.log(action.error.message);
+        if (action.error.message === 'Request failed with status code 403') {
+          state.error = 'Acceso denegado! credenciales incorrectas';
+        } else {
+          state.error = action.error.message;
+        }
+      });
+    // view carreras
+    builder.addCase(getCarreras.pending, (state) => {
       state.loading = true;
       state.carreras = null;
       state.error = null;
-    })
-    builder.addCase(getCarreras.fulfilled,(state, action)=>{
+    });
+    builder.addCase(getCarreras.fulfilled, (state, action) => {
       state.loading = false;
       state.carreras = action.payload;
       state.error = null;
-    })
-    builder.addCase(getCarreras.rejected,(state, action)=>{
-      state.loading = false; 
+    });
+    builder.addCase(getCarreras.rejected, (state, action) => {
+      state.loading = false;
       state.carreras = null;
       console.log(action.error.message);
-      if(action.error.message === 'Request failed with status code 403'){
-        state.error = 'Acceso denegado! credenciales incorrectas'
-      }else{
+      if (action.error.message === 'Request failed with status code 403') {
+        state.error = 'Acceso denegado! credenciales incorrectas';
+      } else {
         state.error = action.error.message;
       }
-    })
-    //view materias
-    builder.addCase(getMaterias.pending,(state)=>{
-        state.loading = true;
-        state.materias = null;
-        state.error = null;
-      })
-      builder.addCase(getMaterias.fulfilled,(state, action)=>{
-        state.loading = false;
-        state.materias = action.payload;
-        state.error = null;
-      })
-      builder.addCase(getMaterias.rejected,(state, action)=>{
-        state.loading = false; 
-        state.materias = null;
-        console.log(action.error.message);
-        if(action.error.message === 'Request failed with status code 403'){
-          state.error = 'Acceso denegado! credenciales incorrectas'
-        }else{
-          state.error = action.error.message;
-        }
-      })
-    
-    //create alumno
+    });
+    // view materias
+    builder.addCase(getMaterias.pending, (state) => {
+      state.loading = true;
+      state.materias = null;
+      state.error = null;
+    });
+    builder.addCase(getMaterias.fulfilled, (state, action) => {
+      state.loading = false;
+      state.materias = action.payload;
+      state.error = null;
+    });
+    builder.addCase(getMaterias.rejected, (state, action) => {
+      state.loading = false;
+      state.materias = null;
+      console.log(action.error.message);
+      if (action.error.message === 'Request failed with status code 403') {
+        state.error = 'Acceso denegado! credenciales incorrectas';
+      } else {
+        state.error = action.error.message;
+      }
+    });
+
+    // create alumno
     builder.addCase(createAlumno.pending, (state) => {
       // Acciones cuando la solicitud está en curso
       state.loading = true;
       state.error = null;
-      state.result = null
-
-    })
+      state.result = null;
+    });
     builder.addCase(createAlumno.fulfilled, (state, action) => {
       // Acciones cuando la solicitud es exitosa
       state.loading = false;
       state.alumnos.push(action.payload); // Asumiendo que el servidor devuelve el nuevo usuario
       state.error = null;
       state.result = action.payload.message;
-    })
+    });
 
     builder.addCase(createAlumno.rejected, (state, action) => {
       // Acciones cuando la solicitud falla
       state.loading = false;
-      console.log(action.error.message)
-      state.error = action.error.message
-      state.result = null
+      console.log(action.error.message);
+      state.error = action.error.message;
+      state.result = null;
     });
 
     // delete alumno reducer
@@ -298,15 +295,17 @@ export const alumnosSlice = createSlice({
       state.loading = true;
       state.error = null;
       state.result = null;
-    })
+    });
     builder.addCase(deleteAlumno.fulfilled, (state, action) => {
       // Acciones cuando la solicitud es exitosa
       state.loading = false;
       // Filtrar el usuario eliminado
-      state.alumnos = state.alumnos.filter(alumno => alumno.id !== action.meta.arg);
+      state.alumnos = state.alumnos.filter(
+        (alumno) => alumno.id !== action.meta.arg,
+      );
       state.error = null;
       state.result = action.payload.message;
-    })
+    });
     builder.addCase(deleteAlumno.rejected, (state, action) => {
       // Acciones cuando la solicitud falla
       state.loading = false;
@@ -314,53 +313,52 @@ export const alumnosSlice = createSlice({
       state.error = action.error.message;
       state.result = null;
     });
-    
-    //modify alumno
+
+    // modify alumno
     builder.addCase(modifyAlumno.pending, (state) => {
       // Acciones cuando la solicitud está en curso
       state.loading = true;
       state.error = null;
-      state.result = null
-
-    })
+      state.result = null;
+    });
     builder.addCase(modifyAlumno.fulfilled, (state, action) => {
       // Acciones cuando la solicitud es exitosa
       state.loading = false;
       state.alumnos.push(action.payload); // Asumiendo que el servidor devuelve el nuevo usuario
       state.error = null;
       state.result = action.payload.message;
-    })
+    });
 
     builder.addCase(modifyAlumno.rejected, (state, action) => {
       // Acciones cuando la solicitud falla
       state.loading = false;
-      console.log(action.error.message)
-      state.error = action.error.message
-      state.result = null
-    })
-    //view alumnos by id
-    builder.addCase(getAlumnoById.pending,(state)=>{
+      console.log(action.error.message);
+      state.error = action.error.message;
+      state.result = null;
+    });
+    // view alumnos by id
+    builder.addCase(getAlumnoById.pending, (state) => {
       state.loading = true;
       state.alumno = null;
       state.error = null;
-    })
-    builder.addCase(getAlumnoById.fulfilled,(state, action)=>{
+    });
+    builder.addCase(getAlumnoById.fulfilled, (state, action) => {
       state.loading = false;
       state.alumno = action.payload;
       state.error = null;
-    })
-    builder.addCase(getAlumnoById.rejected,(state, action)=>{
-      state.loading = false; 
+    });
+    builder.addCase(getAlumnoById.rejected, (state, action) => {
+      state.loading = false;
       state.alumno = null;
       console.log(action.error.message);
-      if(action.error.message === 'Request failed with status code 403'){
-        state.error = 'Acceso denegado! credenciales incorrectas'
-      }else{
+      if (action.error.message === 'Request failed with status code 403') {
+        state.error = 'Acceso denegado! credenciales incorrectas';
+      } else {
         state.error = action.error.message;
       }
     });
-  }
-})
+  },
+});
 
 export const selectAlumnos = (state) => state.alumnos.alumnos;
 export const errorAlumnos = (state) => state.alumnos.error;
@@ -372,6 +370,5 @@ export const selectMaterias = (state) => state.alumnos.materias;
 export const selectedAlumnoData = (state) => state.alumnos.selectedAlumno;
 export const alumnoData = (state) => state.alumnos.alumno;
 
-export const { changeFormData, selectedAlumno } =
-  alumnosSlice.actions;
+export const { changeFormData, selectedAlumno } = alumnosSlice.actions;
 export default alumnosSlice.reducer;

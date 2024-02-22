@@ -34,4 +34,3 @@ function AuthOutlet({ children, header }) {
   );
 }
 export default AuthOutlet;
-

@@ -15,7 +15,13 @@ import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '@/features/user/userSlice';
-export default function TemporaryDrawer({ isOpen, toggleDrawer, username, role }) {
+
+export default function TemporaryDrawer({
+  isOpen,
+  toggleDrawer,
+  username,
+  role,
+}) {
   const dispatch = useDispatch();
   const menuItems = [
     { text: 'Inicio', path: '/home', icon: <HomeIcon /> },
@@ -25,7 +31,7 @@ export default function TemporaryDrawer({ isOpen, toggleDrawer, username, role }
   ];
   const handleLogout = () => {
     dispatch(logoutUser());
-  }
+  };
   const list = (anchor) => (
     <Box
       sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
@@ -34,7 +40,10 @@ export default function TemporaryDrawer({ isOpen, toggleDrawer, username, role }
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        <ListItem disablePadding sx={{ color: 'inherit', textDecoration: 'none' }}>
+        <ListItem
+          disablePadding
+          sx={{ color: 'inherit', textDecoration: 'none' }}
+        >
           <ListItemText primary={username} secondary={role} />
           <ListItemIcon>
             <PersonIcon />
@@ -42,22 +51,29 @@ export default function TemporaryDrawer({ isOpen, toggleDrawer, username, role }
         </ListItem>
         <Divider />
         {menuItems.map((item) => (
-          <ListItem key={item.text} disablePadding component={Link} to={item.path} sx={{ color: 'inherit', textDecoration: 'none' }}>
+          <ListItem
+            key={item.text}
+            disablePadding
+            component={Link}
+            to={item.path}
+            sx={{ color: 'inherit', textDecoration: 'none' }}
+          >
             <ListItemButton>
-              <ListItemIcon>
-                {item.icon}
-              </ListItemIcon>
+              <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} />
             </ListItemButton>
           </ListItem>
         ))}
         <Divider />
-        <ListItem disablePadding sx={{ color: 'inherit', textDecoration: 'none' }}>
+        <ListItem
+          disablePadding
+          sx={{ color: 'inherit', textDecoration: 'none' }}
+        >
           <ListItemButton>
             <ListItemIcon>
               <ExitToAppIcon />
             </ListItemIcon>
-            <ListItemText primary="Salir" onClick={handleLogout}/>
+            <ListItemText primary="Salir" onClick={handleLogout} />
           </ListItemButton>
         </ListItem>
       </List>

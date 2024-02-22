@@ -1,9 +1,9 @@
-import React, { useState} from 'react';
-import { Button, Menu, MenuItem } from '@mui/material';
+import React, { useState } from 'react';
+import { Button, Menu, MenuItem, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { IconButton } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeMode, selectMode } from '@/features/user/userSlice';
+
 function SimpleMenu() {
   const [anchorEl, setAnchorEl] = useState(null);
   const dispatch = useDispatch();

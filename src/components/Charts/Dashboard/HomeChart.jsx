@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { Chart } from "react-google-charts";
+import { Chart } from 'react-google-charts';
 // Datos de ejemplo: cantidad de alumnos por día de la semana
 const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
 const alumnosPorDia = [20, 25, 18, 22, 30]; // Ejemplo: reemplaza con tus datos reales
