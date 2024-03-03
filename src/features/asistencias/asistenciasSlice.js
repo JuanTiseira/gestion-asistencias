@@ -144,9 +144,23 @@ export const getAsistencias = createAsyncThunk(
     return response;
   },
 );
-
+export const filterAsistencias = createAsyncThunk(
+  'asistencias/filterAsistencias',
+  async (params, { getState }) => {
+    const state = getState();
+    const config = {
+      headers: {
+        Authorization: `token ${state.user.user.token}`,
+      },
+      params: params, // Pasar los parámetros recibidos a la solicitud
+    };
+    const request = await axios.get(asistenciaUrl, config);
+    const response = await request.data;
+    return response;
+  },
+);
 export const getCarreras = createAsyncThunk(
-  'alumnos/getCarreras',
+  'asistencias/getCarreras',
   async (_, { getState }) => {
     const state = getState();
 
@@ -162,7 +176,7 @@ export const getCarreras = createAsyncThunk(
   },
 );
 export const getMaterias = createAsyncThunk(
-  'alumnos/getMaterias',
+  'asistencias/getMaterias',
   async (_, { getState }) => {
     const state = getState();
 
@@ -170,6 +184,23 @@ export const getMaterias = createAsyncThunk(
       headers: {
         Authorization: `token ${state.user.user.token}`,
       },
+    };
+    const request = await axios.get(materiasUrl, config);
+    const response = await request.data;
+
+    return response;
+  },
+);
+export const getMateriasByCarrera = createAsyncThunk(
+  'asistencias/getMateriasByCarrera',
+  async (params, { getState }) => {
+    const state = getState();
+
+    const config = {
+      headers: {
+        Authorization: `token ${state.user.user.token}`,
+      },
+      params: params,
     };
     const request = await axios.get(materiasUrl, config);
     const response = await request.data;
@@ -214,7 +245,6 @@ export const AsistenciasSlice = createSlice({
       .addCase(getAsistencias.rejected, (state, action) => {
         state.loading = false;
         state.asistencias = null;
-        console.log(action.error.message);
         if (action.error.message === 'Request failed with status code 403') {
           state.error = 'Acceso denegado! credenciales incorrectas';
         } else {
@@ -235,9 +265,30 @@ export const AsistenciasSlice = createSlice({
     builder.addCase(getCarreras.rejected, (state, action) => {
       state.loading = false;
       state.carreras = null;
-      console.log(action.error.message);
       if (action.error.message === 'Request failed with status code 403') {
         state.error = 'Acceso denegado! credenciales incorrectas';
+      } else {
+        state.error = action.error.message;
+      }
+    });
+    // filter asistencias
+    builder.addCase(filterAsistencias.pending, (state) => {
+      state.loading = true;
+      state.asistencias = null;
+      state.error = null;
+    });
+    builder.addCase(filterAsistencias.fulfilled, (state, action) => {
+      state.loading = false;
+      state.asistencias = action.payload;
+      state.error = null;
+    });
+    builder.addCase(filterAsistencias.rejected, (state, action) => {
+      state.loading = false;
+      state.asistencias = null;
+      if (action.error.message === 'Request failed with status code 403') {
+        state.error = 'Acceso denegado! credenciales incorrectas';
+      } else if (action.error.message === 'Request failed with status code 404') {
+        state.error = 'No se encontraron resultados para la solicitud.';
       } else {
         state.error = action.error.message;
       }
@@ -256,14 +307,33 @@ export const AsistenciasSlice = createSlice({
     builder.addCase(getMaterias.rejected, (state, action) => {
       state.loading = false;
       state.materias = null;
-      console.log(action.error.message);
       if (action.error.message === 'Request failed with status code 403') {
         state.error = 'Acceso denegado! credenciales incorrectas';
       } else {
         state.error = action.error.message;
       }
     });
+    // view materias by carrera
 
+    builder.addCase(getMateriasByCarrera.pending, (state) => {
+      state.loading = true;
+      state.materias = null;
+      state.error = null;
+    });
+    builder.addCase(getMateriasByCarrera.fulfilled, (state, action) => {
+      state.loading = false;
+      state.materias = action.payload;
+      state.error = null;
+    });
+    builder.addCase(getMateriasByCarrera.rejected, (state, action) => {
+      state.loading = false;
+      state.materias = null;
+      if (action.error.message === 'Request failed with status code 403') {
+        state.error = 'Acceso denegado! credenciales incorrectas';
+      } else {
+        state.error = action.error.message;
+      }
+    });
     // create asistencia
     builder.addCase(createAsistencias.pending, (state) => {
       // Acciones cuando la solicitud está en curso
@@ -360,6 +430,8 @@ export const resultAsistencias = (state) => state.asistencias.result;
 export const loadingAsistencias = (state) => state.asistencias.loading;
 export const selectCarreras = (state) => state.asistencias.carreras;
 export const selectMaterias = (state) => state.asistencias.materias;
+export const getFormData = (state) => state.asistencias.formData;
+export const getAsistencia = (state) => state.asistencias.asistencia;
 
 export const { changeFormData, selectedAsistencia } = AsistenciasSlice.actions;
 export default AsistenciasSlice.reducer;

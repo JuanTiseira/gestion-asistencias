@@ -101,7 +101,23 @@ export const createAlumno = createAsyncThunk(
     }
   },
 );
+export const getAlumnosByCarrera = createAsyncThunk(
+  'alumnos/getAlumnosByCarrera',
+  async (params, { getState }) => {
+    const state = getState();
 
+    const config = {
+      headers: {
+        Authorization: `token ${state.user.user.token}`,
+      },
+      params: params,
+    };
+    const request = await axios.get(alumnoUrl, config);
+    const response = await request.data;
+
+    return response;
+  },
+);
 export const modifyAlumno = createAsyncThunk(
   'alumnos/modifyAlumno',
   async (alumnoData, { getState }) => {
@@ -183,7 +199,7 @@ export const alumnosSlice = createSlice({
   name: 'alumnos',
   initialState: {
     loading: false,
-    alumnos: [],
+    alumnos: null,
     alumno: null,
     materias: [],
     carreras: [],
@@ -198,6 +214,9 @@ export const alumnosSlice = createSlice({
     },
     selectedAlumno: (state, action) => {
       state.selectedAlumno = action.payload;
+    },
+    changeAlumnos: (state, action) => {
+      state.alumnos = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -223,6 +242,27 @@ export const alumnosSlice = createSlice({
           state.error = action.error.message;
         }
       });
+    // view alumnos by carrera
+    builder.addCase(getAlumnosByCarrera.pending, (state) => {
+      state.loading = true;
+      state.alumnos = null;
+      state.error = null;
+    })
+    builder.addCase(getAlumnosByCarrera.fulfilled, (state, action) => {
+      state.loading = false;
+      state.alumnos = action.payload;
+      state.error = null;
+    })
+    builder.addCase(getAlumnosByCarrera.rejected, (state, action) => {
+      state.loading = false;
+      state.alumnos = null;
+      console.log(action.error.message);
+      if (action.error.message === 'Request failed with status code 403') {
+        state.error = 'Acceso denegado! credenciales incorrectas';
+      } else {
+        state.error = action.error.message;
+      }
+    });
     // view carreras
     builder.addCase(getCarreras.pending, (state) => {
       state.loading = true;
@@ -370,5 +410,5 @@ export const selectMaterias = (state) => state.alumnos.materias;
 export const selectedAlumnoData = (state) => state.alumnos.selectedAlumno;
 export const alumnoData = (state) => state.alumnos.alumno;
 
-export const { changeFormData, selectedAlumno } = alumnosSlice.actions;
+export const { changeFormData, selectedAlumno, changeAlumnos } = alumnosSlice.actions;
 export default alumnosSlice.reducer;

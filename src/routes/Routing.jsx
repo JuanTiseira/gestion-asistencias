@@ -12,6 +12,8 @@ import Alumnos from '@/pages/Alumnos/Alumnos';
 import ModificarAlumno from '@/pages/Alumnos/modificarAlumno/ModificarAlumno';
 import AgregarAlumno from '@/pages/Alumnos/AgregarAlumno/AgregarAlumno';
 import Asistencias from '@/pages/Asistencias/Asistencias';
+import AgregarAsistencia from '@/pages/Asistencias/AgregarAsistencias/AgregarAsistencias';
+import AsistenciaDetail from '@/components/Forms/Asistencias/AsistenciaDetail/AsistenciaDetail';
 
 function Routing() {
   return (
@@ -24,6 +26,15 @@ function Routing() {
       </Route>
       <Route element={<ProtectedRoute />}>
         <Route path="/asistencias" element={<Asistencias />} />
+      </Route>
+      <Route element={<ProtectedRoute />}>
+        <Route
+          path="/asistencias/detalle-asistencia/:asistenciaId"
+          element={<AsistenciaDetail />}
+        />
+      </Route>
+      <Route element={<ProtectedRoute />}>
+        <Route path="/asistencias/agregar-asistencia" element={<AgregarAsistencia />} />
       </Route>
       <Route element={<ProtectedRoute />}>
         <Route path="/administracion" element={<Admin />} />

@@ -4,27 +4,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@emotion/react';
 import AdminTable from '@/components/Tables/AdminTable/AdminTable';
-import {
-  changeFormData,
-  getFormData,
-  loadingUsers,
-  getRols,
-  getUsers,
-  selectUsers,
-} from '@/features/users/usersSlice';
 import Spinner from '@/components/Spinners/Spinner';
 import SearchForm from '@/components/Forms/Asistencias/SearchForm/SearchForm';
+import { loadingAsistencias, selectAsistencias, getFormData, changeFormData, getAsistencias, getAsistencia } from '@/features/asistencias/asistenciasSlice';
+import AsistenciasTable from '@/components/Tables/AsistenciasTable/AsistenciasTable';
+import AsistenciaDetail from '@/components/Forms/Asistencias/AsistenciaDetail/AsistenciaDetail';
 
 function Admin() {
   const theme = useTheme();
   const navigate = useNavigate();
-  const loading = useSelector(loadingUsers);
-  const usersData = useSelector(selectUsers);
+  const loading = useSelector(loadingAsistencias);
+  const asistenciasData = useSelector(selectAsistencias);
+  const asistencia = useSelector(getAsistencia);
 
-  const initialData = {
-    name: 'John Doe',
-  };
-  const [data, setData] = useState(initialData);
   const dispatch = useDispatch();
   const formData = useSelector(getFormData);
 
@@ -33,14 +25,10 @@ function Admin() {
     setData(data);
   };
 
-  const print = () => {
-    console.log('dasdasd', formData);
-  };
-
   useEffect(() => {
-    console.log('dispachando');
-    dispatch(getRols());
-    dispatch(getUsers());
+    
+    dispatch(getAsistencias());
+  
   }, [dispatch]);
 
   return (
@@ -74,7 +62,7 @@ function Admin() {
         <Button
           variant="contained"
           color="success"
-          onClick={() => navigate('/administracion/agregar-usuario')}
+          onClick={() => navigate('/asistencias/agregar-asistencia')}
         >
           Agregar asistencias
         </Button>
@@ -92,13 +80,16 @@ function Admin() {
       </Box>
       <Stack
         sx={{
+          p: 2,
+          borderRadius: 2,
           boxShadow: 3,
           backgroundColor: 'grey.200',
           color: 'white',
         }}
       >
-        {usersData ? <AdminTable theme={theme} usersData={usersData} /> : null}
+        {asistenciasData ? <AsistenciasTable theme={theme} asistenciasData={asistenciasData} /> : null}
       </Stack>
+      
     </Container>
   );
 }

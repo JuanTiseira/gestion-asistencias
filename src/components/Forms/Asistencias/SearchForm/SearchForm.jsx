@@ -4,21 +4,24 @@ import Button from '@mui/material/Button';
 import { Stack, Container, Paper, Typography, Box, Grid } from '@mui/material';
 import { Autocomplete } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectCarreras, selectMaterias } from '@/features/asistencias/asistenciasSlice';
+import { errorAsistencias, filterAsistencias, getAsistencias, selectCarreras, selectMaterias } from '@/features/asistencias/asistenciasSlice';
 import { getCarreras, getMaterias } from '@/features/asistencias/asistenciasSlice';
+import Swal from 'sweetalert2';
+import { getAlumnos, selectAlumnos } from '@/features/alumnos/alumnosSlice';
 
 function SearchForm() {
   const dispatch = useDispatch();
   const carreras = useSelector(selectCarreras);
   const materias = useSelector(selectMaterias);
-  const options = ['Programacion y analisis', 'gestion de Pymes'];
+  const alumnos = useSelector(selectAlumnos);
   const [searchValues, setSearchValues] = useState({
     fecha: '',
     carrera: null,
     materia: null,
+    alumno: null,
     modulo: '',
   });
-
+  const error = useSelector(errorAsistencias);
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setSearchValues({
@@ -34,9 +37,31 @@ function SearchForm() {
   };
   const handleSearch = (event) => {
     event.preventDefault();
-    // Aquí puedes realizar la lógica de búsqueda, por ejemplo, enviar los valores a un backend
-    // y manejar la respuesta, o imprimir los valores directamente
-    console.log('Valores de búsqueda:', searchValues);
+    const params = {};
+    console.log(searchValues)
+    if (searchValues.fecha) {
+      params.fecha = searchValues.fecha;
+    }
+    if (searchValues.carrera && searchValues.carrera.value) {
+      params.carrera = searchValues.carrera.value;
+    }
+    if (searchValues.materia && searchValues.materia.value) {
+      params.materia = searchValues.materia.value;
+    }
+    if (searchValues.alumno && searchValues.alumno.value) {
+      params.alumno = searchValues.alumno.value;
+    }
+    console.log(params)
+    dispatch(filterAsistencias(params)).then((result) => {
+      if (result.payload) {
+        console.log("sddsdsd",result);
+        Swal.fire({
+          icon: 'success',
+          title: 'Exito',
+          text: "Cargando resultado!",
+        });
+      }
+    });
   };
   const mapOptions = (data) => {
     return data.map(item => ({
@@ -51,10 +76,23 @@ function SearchForm() {
       value: item.id
     })
   };
-    useEffect(() => {
+  useEffect(() => {
     dispatch(getCarreras());
     dispatch(getMaterias());
+    dispatch(getAlumnos())
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error,
+      });
+      dispatch(getAsistencias());
+    }
+  }, [error]);
+
   return (
     <Stack>
       {/* Contenido de la página */}
@@ -99,6 +137,17 @@ function SearchForm() {
               renderInput={(params) => <TextField {...params} label="Materia" />}
               isOptionEqualToValue={(option, value) => option.value === value.value}
             />}
+            {alumnos && 
+              <Autocomplete
+              disablePortal
+              id="alumno"
+              name="alumno"
+              options={mapOptions(alumnos)}
+              value={searchValues.alumno}
+              onChange={(event, value) => handleautoAutocompleteChange(event, value, 'alumno')}
+              renderInput={(params) => <TextField {...params} label="Alumno" />}
+              isOptionEqualToValue={(option, value) => option.value === value.value}
+            />}
               <Grid container spacing={2}>
                 <Grid item>
                   <Button variant="contained" color="primary" type="submit">
@@ -108,7 +157,7 @@ function SearchForm() {
                 <Grid item>
                   <Button
                     variant="contained"
-                    onClick={() => setSearchValues({ fecha: '', carrera: null, materia: null, modulo: '' })}
+                    onClick={() => setSearchValues({ fecha: '', carrera: null, materia: null, alumno: null, modulo: '' })}
                   >
                     Limpiar
                   </Button>

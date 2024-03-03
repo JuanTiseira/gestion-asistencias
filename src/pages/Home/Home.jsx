@@ -180,7 +180,7 @@ function Home() {
               }}
             >
               <CardContent>
-                <AlumnosPorDiaChart />
+                {/* <AlumnosPorDiaChart /> */}
               </CardContent>
             </Card>
           </Grid>
@@ -192,7 +192,7 @@ function Home() {
               }}
             >
               <CardContent>
-                <AlumnosCircularChart />
+                {/* <AlumnosCircularChart /> */}
               </CardContent>
             </Card>
           </Grid>

@@ -12,38 +12,34 @@ import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Spinner from '@/components/Spinners/Spinner';
-import CustomToolbarSelect from './CustomToolBarSelect';
-import {
-  selectUsers,
-  getUsers,
-  deleteUser,
-  loadingUsers,
-  selectedUser,
-} from '@/features/users/usersSlice';
+import CustomToolbarSelect from '../AdminTable/CustomToolBarSelect';
 
-function AdminTable({ theme, usersData }) {
+import { loadingAsistencias, selectedAsistencia, getAsistencias, deleteAsistencia, selectMaterias, selectCarreras, getAsistenciaById, getAsistencia } from '@/features/asistencias/asistenciasSlice';
+
+function AsistenciasTable({ theme, asistenciasData }) {
   const dispatch = useDispatch();
-  // const usersData = useSelector(selectUsers);
-  const loading = useSelector(loadingUsers);
-  const [selectedUserId, setSelectedUserId] = useState(null);
+  const loading = useSelector(loadingAsistencias);
   const navigate = useNavigate();
-  const handle = () => {
-    dispatch(getUsers());
+  const materias = useSelector(selectMaterias);
+  const carreras = useSelector(selectCarreras);
+
+  const handleModificar = (asistenciaId) => {
+    console.log('Modificar asistencia con ID:', asistenciaId);
+
+    const selectedAsistenciaData = asistenciasData.find((asistencia) => asistencia.id === asistenciaId);
+    console.log('asistencia seleccionada:', selectedAsistenciaData);
+    dispatch(selectedAsistencia(selectedAsistenciaData));
+    navigate('/administracion/editar-asistencia');
   };
-
-  const handleModificar = (userId) => {
-
-    const selectedUserData = usersData.find((user) => user.id === userId);
-    dispatch(selectedUser(selectedUserData));
-    navigate('/administracion/editar-usuario');
+  const handleView = (asistenciaId) => {
+    navigate(`/asistencias/detalle-asistencia/${asistenciaId}`);    
   };
-  
-
-  const handleEliminar = (userId) => {
-    setSelectedUserId(userId);
+  const handleEliminar = (asistenciaId) => {
+    setSelectedUserId(asistenciaId);
 
     Swal.fire({
       title: 'Confirmar eliminación',
@@ -56,20 +52,19 @@ function AdminTable({ theme, usersData }) {
     }).then((result) => {
       if (result.isConfirmed) {
         // Lógica de eliminación aquí
-        dispatch(deleteUser(userId)).then(() => {
-          dispatch(getUsers());
+        dispatch(deleteAsistencia(asistenciaId)).then(() => {
+          dispatch(getAsistencias());
 
           // Mostrar una alerta de éxito con SweetAlert2
           Swal.fire(
             'Eliminado',
-            `Usuario con ID ${userId} eliminado con éxito.`,
+            `Asistencia con ID ${asistenciaId} eliminada con éxito.`,
             'success',
           );
         });
       }
     });
   };
-
   const columns = [
     {
       name: 'id',
@@ -80,40 +75,25 @@ function AdminTable({ theme, usersData }) {
       },
     },
     {
-      name: 'nombre',
-      label: 'Nombre',
+      name: 'fecha',
+      label: 'Fecha',
       options: {
         filter: true,
         sort: false,
       },
     },
     {
-      name: 'apellido',
-      label: 'Apellido',
+      name: 'carrera',
+      label: 'Carrera',
       options: {
+        customBodyRender: (value) => value.nombre,
         filter: true,
         sort: false,
       },
     },
     {
-      name: 'telefono',
-      label: 'Telefono',
-      options: {
-        filter: true,
-        sort: false,
-      },
-    },
-    {
-      name: 'email',
-      label: 'Email',
-      options: {
-        filter: true,
-        sort: false,
-      },
-    },
-    {
-      name: 'rol',
-      label: 'Rol',
+      name: 'materia',
+      label: 'Materia',
       options: {
         customBodyRender: (value) => value.nombre,
         filter: true,
@@ -132,9 +112,9 @@ function AdminTable({ theme, usersData }) {
               variant="outlined"
               aria-label="editar"
               color="warning"
-              onClick={() => handleModificar(tableMeta.rowData[0])}
+              onClick={() => handleView(tableMeta.rowData[0])}
             >
-              <EditIcon />
+              <VisibilityIcon />
             </IconButton>
             <IconButton
               variant="outlined"
@@ -166,19 +146,18 @@ function AdminTable({ theme, usersData }) {
   };
 
   useEffect(() => {
-    if (!usersData) {
-      dispatch(getUsers());
+    if (!asistenciasData) {
+      dispatch(getAsistencias());
     }
-  }, [dispatch, usersData]);
-
+  }, [dispatch, asistenciasData]);
   return (
     <Stack>
       <Paper>
         <TableContainer component={Paper}>
-          {usersData ? (
+          {asistenciasData ? (
             <MUIDatatable
-              title="Lista de usuarios"
-              data={usersData}
+              title="Lista de Asistencias"
+              data={asistenciasData}
               columns={columns}
               options={options}
             />
@@ -191,4 +170,4 @@ function AdminTable({ theme, usersData }) {
   );
 }
 
-export default AdminTable;
+export default AsistenciasTable;
