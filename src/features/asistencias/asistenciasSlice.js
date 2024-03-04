@@ -69,7 +69,7 @@ export const getAsistenciaById = createAsyncThunk(
   },
 );
 
-export const createAsistencias = createAsyncThunk(
+export const createAsistencia = createAsyncThunk(
   'asistencias/createAsistencia',
   async (asistenciaData, { getState }) => {
     const state = getState();
@@ -335,13 +335,13 @@ export const AsistenciasSlice = createSlice({
       }
     });
     // create asistencia
-    builder.addCase(createAsistencias.pending, (state) => {
+    builder.addCase(createAsistencia.pending, (state) => {
       // Acciones cuando la solicitud está en curso
       state.loading = true;
       state.error = null;
       state.result = null;
     });
-    builder.addCase(createAsistencias.fulfilled, (state, action) => {
+    builder.addCase(createAsistencia.fulfilled, (state, action) => {
       // Acciones cuando la solicitud es exitosa
       state.loading = false;
       state.asistencias.push(action.payload); // Asumiendo que el servidor devuelve el nuevo usuario
@@ -349,7 +349,7 @@ export const AsistenciasSlice = createSlice({
       state.result = action.payload.message;
     });
 
-    builder.addCase(createAsistencias.rejected, (state, action) => {
+    builder.addCase(createAsistencia.rejected, (state, action) => {
       // Acciones cuando la solicitud falla
       state.loading = false;
       state.error = action.error.message;

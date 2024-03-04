@@ -115,7 +115,7 @@ function SearchForm() {
                 type="date"
                 value={searchValues.fecha}
               />
-              {carreras && 
+              {carreras &&
               <Autocomplete
                 disablePortal
                 id="carrera"
