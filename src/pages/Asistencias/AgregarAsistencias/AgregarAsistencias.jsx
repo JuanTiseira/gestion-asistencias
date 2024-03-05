@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import {
   getAlumnos,
   createAlumno,
+  changeAlumnos,
 } from '@/features/alumnos/alumnosSlice';
 import { 
   changeFormData,
@@ -37,7 +38,7 @@ function AgregarAsistencia() {
     });
     
   };
-
+  dispatch(changeAlumnos(null))
   return (
     <Stack>
       <Container>

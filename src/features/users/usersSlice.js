@@ -10,7 +10,7 @@ const rolsEndpoint = '/api/rol/';
 const usersUrl = `${apiUrl}${usersEndpoint}`;
 const usersModifyUrl = `${apiUrl}${usersModifyEndpoint}`;
 const rolsUrl = `${apiUrl}${rolsEndpoint}`;
-
+const UserUrlId = (userId) => `${usersUrl}${userId}`;
 const deleteUserUrl = (userId) => `${usersUrl}${userId}`;
 
 export const deleteUser = createAsyncThunk(
@@ -137,12 +137,38 @@ export const logoutUser = createAsyncThunk('user/logoutUser', async () => {
   localStorage.removeItem('token');
   localStorage.removeItem('rol');
 });
+export const getUserById = createAsyncThunk(
+  'alumnos/getUserById',
+  async (userId, { getState }) => {
+    const state = getState();
+
+    const config = {
+      headers: {
+        Authorization: `token ${state.user.user.token}`,
+      },
+    };
+    try {
+      const response = await axios.get(UserUrlId(userId), config);
+      return response.data;
+    } catch (error) {
+      console.log(error.response.data.error);
+      if (error.response) {
+        throw new Error(error.response.data.error || 'Error desconocido');
+      } else if (error.request) {
+        throw new Error('No se recibió respuesta del servidor');
+      } else {
+        throw new Error('Error al configurar la solicitud');
+      }
+    }
+  },
+);
 
 export const usersSlice = createSlice({
   name: 'users',
   initialState: {
     loading: false,
     users: null,
+    user: null,
     roles: [],
     error: null,
     result: null,
@@ -268,6 +294,29 @@ export const usersSlice = createSlice({
       state.error = action.error.message;
       state.result = null;
     });
+    // get user by id
+    builder.addCase(getUserById.pending, (state) => {
+      // Acciones cuando la solicitud está en curso
+      state.loading = true;
+      state.error = null;
+      state.user = null;
+      state.result = null;
+    });
+    builder.addCase(getUserById.fulfilled, (state, action) => {
+      // Acciones cuando la solicitud es exitosa
+      state.loading = false;
+      state.user = action.payload; // Asumiendo que el servidor devuelve el nuevo usuario
+      state.error = null;
+      state.result = action.payload.message;
+    });
+
+    builder.addCase(getUserById.rejected, (state, action) => {
+      // Acciones cuando la solicitud falla
+      state.loading = false;
+      state.user = null;
+      state.error = action.error.message;
+      state.result = null;
+    });
   },
 });
 
@@ -278,6 +327,7 @@ export const loadingUsers = (state) => state.users.loading;
 export const getFormData = (state) => state.users.formData;
 export const getRoles = (state) => state.users.roles;
 export const selectedUserData = (state) => state.users.selectedUser;
+export const userData = (state) => state.users.user;
 
 export const { changeFormData, selectedUser } = usersSlice.actions;
 export default usersSlice.reducer;

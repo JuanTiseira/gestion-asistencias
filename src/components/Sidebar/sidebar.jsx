@@ -15,7 +15,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '@/features/user/userSlice';
-
+import { Grid, Typography } from '@mui/material';
 export default function TemporaryDrawer({
   isOpen,
   toggleDrawer,
@@ -40,16 +40,23 @@ export default function TemporaryDrawer({
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        <ListItem
-          disablePadding
-          sx={{ color: 'inherit', textDecoration: 'none' }}
-        >
-          <ListItemText primary={username} secondary={role} />
-          <ListItemIcon>
-            <PersonIcon />
-          </ListItemIcon>
-        </ListItem>
+      <Grid container direction="column" alignItems="center" spacing={2} sx={{marginTop:2, marginBottom:2}}>
+      <Grid item>
+        <PersonIcon fontSize="large" />
+      </Grid>
+      <Grid item>
+        <Typography variant="h1" align="center">
+          {username}
+        </Typography>
+      </Grid>
+      <Grid item>
+        <Typography variant="subtitle1" align="center">
+          {role}
+        </Typography>
+      </Grid>
+    </Grid>
         <Divider />
+        <Grid container direction="column" alignItems="center" spacing={2} sx={{p:3, marginBlock:2}}>
         {menuItems.map((item) => (
           <ListItem
             key={item.text}
@@ -64,6 +71,7 @@ export default function TemporaryDrawer({
             </ListItemButton>
           </ListItem>
         ))}
+        </Grid>
         <Divider />
         <ListItem
           disablePadding

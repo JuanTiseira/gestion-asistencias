@@ -26,13 +26,23 @@ function Admin() {
   };
 
   useEffect(() => {
-    
+    if(asistenciasData !== null){
+    console.log(asistenciasData)
     dispatch(getAsistencias());
+    
+    }
   
   }, [dispatch]);
-
+  const [showSpinner, setShowSpinner] = useState(false);
+  
+  useEffect(() => {
+    console.log(loading)
+    
+  }, [loading]);
   return (
-    <Container
+    <div>
+      {showSpinner ? <Spinner /> : 
+      <Container
       sx={{
         marginTop: '55px',
         p: 2,
@@ -42,10 +52,9 @@ function Admin() {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
+        paddingBottom: '60px' 
       }}
     >
-      {loading && <Spinner />}
-      {/* Contenido de la página */}
       <Box sx={{ textAlign: 'center', marginY: 3 }}>
         <Typography variant="sectionTitle">Asistencias</Typography>
       </Box>
@@ -87,10 +96,12 @@ function Admin() {
           color: 'white',
         }}
       >
-        {asistenciasData ? <AsistenciasTable theme={theme} asistenciasData={asistenciasData} /> : null}
+        {asistenciasData !== null ? <AsistenciasTable theme={theme} asistenciasData={asistenciasData} /> : null}
       </Stack>
       
-    </Container>
+    </Container>}
+    </div>
+    
   );
 }
 

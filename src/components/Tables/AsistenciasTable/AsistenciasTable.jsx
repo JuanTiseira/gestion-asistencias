@@ -39,7 +39,7 @@ function AsistenciasTable({ theme, asistenciasData }) {
     navigate(`/asistencias/detalle-asistencia/${asistenciaId}`);    
   };
   const handleEliminar = (asistenciaId) => {
-    setSelectedUserId(asistenciaId);
+    // setSelectedUserId(asistenciaId);
 
     Swal.fire({
       title: 'Confirmar eliminación',
@@ -51,8 +51,8 @@ function AsistenciasTable({ theme, asistenciasData }) {
       confirmButtonText: 'Sí, eliminar',
     }).then((result) => {
       if (result.isConfirmed) {
-        // Lógica de eliminación aquí
-        dispatch(deleteAsistencia(asistenciaId)).then(() => {
+          // Lógica de eliminación aquí
+          dispatch(deleteAsistencia(asistenciaId)).then(() => {
           dispatch(getAsistencias());
 
           // Mostrar una alerta de éxito con SweetAlert2
@@ -145,11 +145,12 @@ function AsistenciasTable({ theme, asistenciasData }) {
     ),
   };
 
-  useEffect(() => {
-    if (!asistenciasData) {
-      dispatch(getAsistencias());
-    }
-  }, [dispatch, asistenciasData]);
+  // useEffect(() => {
+  //   if (!asistenciasData) {
+  //     dispatch(getAsistencias());
+  //   }
+  // }, [dispatch, asistenciasData]);
+  
   return (
     <Stack>
       <Paper>

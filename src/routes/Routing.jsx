@@ -47,7 +47,7 @@ function Routing() {
       </Route>
       <Route element={<ProtectedRoute />}>
         <Route
-          path="/administracion/editar-usuario"
+          path="/administracion/editar-usuario/:userId"
           element={<ModificarUsuario />}
         />
       </Route>

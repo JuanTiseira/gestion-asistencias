@@ -1,15 +1,16 @@
 import React, {useEffect} from 'react';
-import { Paper, Typography, Divider, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Stack, Container } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { Grid, Paper, Typography, Divider, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Stack, Container, Button } from '@mui/material';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getAsistencia, getAsistenciaById } from '@/features/asistencias/asistenciasSlice';
 import { useDispatch } from 'react-redux';
-
+import Home from '@mui/icons-material/Home';
+import { ArrowBack } from '@mui/icons-material';
 function AsistenciaDetail() {
   const dispatch = useDispatch();
   const { asistenciaId } = useParams();
   const asistencia = useSelector(getAsistencia);
-
+  const navigate = useNavigate();
   useEffect(() => {
     console.log(asistenciaId)
     dispatch(getAsistenciaById(asistenciaId));
@@ -29,6 +30,17 @@ function AsistenciaDetail() {
         }}
       >
       <Container>
+        <Grid item sx={{p:2}}>
+          <Button
+            startIcon={<ArrowBack />}
+            variant="contained"
+            color="secondary"
+            onClick={() => navigate('/asistencias')}
+            sx={{ width: { xs: '100%', sm: 'auto' } }}
+          >
+            Volver
+          </Button>
+        </Grid>
         {asistencia && <Paper elevation={3} sx={{ padding: 3, borderRadius: 2 }}>
       <Typography variant="h2" gutterBottom>
         Detalle de Asistencia

@@ -8,12 +8,17 @@ import {
   getRols,
   selectUsers,
   modifyUser,
+  getUserById,
+  userData,
 } from '@/features/users/usersSlice';
 import UsuariosForm from '@/components/Forms/AdminForm/AdminForm';
+import { useParams } from 'react-router-dom';
 
 function ModificarUsuario() {
   const dispatch = useDispatch();
-  const userData = useSelector(selectedUserData);
+  const user = useSelector(userData);
+  const { userId } = useParams();
+
   const onSubmit = (values) => {
     console.log('editar', values);
     dispatch(modifyUser(values)).then((result) => {
@@ -31,12 +36,14 @@ function ModificarUsuario() {
 
   useEffect(() => {
     dispatch(getRols());
+    console.log("fdfd")
+    dispatch(getUserById(userId));
   }, []);
 
   return (
     <Stack>
       <Container>
-        <UsuariosForm values={userData} isEdit onSubmit={onSubmit} />
+        {user && <UsuariosForm values={user} isEdit onSubmit={onSubmit} />}
       </Container>
     </Stack>
   );

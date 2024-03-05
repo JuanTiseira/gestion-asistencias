@@ -19,9 +19,7 @@ function Admin() {
   const navigate = useNavigate();
   const loading = useSelector(loadingUsers);
   const usersData = useSelector(selectUsers);
-  const initialData = {
-    name: 'John Doe',
-  };
+
   const dispatch = useDispatch();
   const formData = useSelector(getFormData);
 

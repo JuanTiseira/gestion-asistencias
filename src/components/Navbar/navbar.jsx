@@ -17,7 +17,6 @@ import {
   changeMode,
 } from '@/features/user/userSlice';
 import TemporaryDrawer from '../Sidebar/sidebar';
-
 export default function ButtonAppBar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
@@ -66,13 +65,6 @@ export default function ButtonAppBar() {
               }}
             />
           </IconButton>
-          {/* {user ? (
-            <Typography variant="h7" component="div">Bienvenido, {((user.username))} </Typography>
-          ) : (null)} */}
-          {/* <Button
-            color="inherit"
-            onClick={handleLogout}
-          >Salir</Button> */}
         </Toolbar>
       </AppBar>
       <TemporaryDrawer

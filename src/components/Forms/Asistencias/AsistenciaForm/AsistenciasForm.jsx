@@ -22,7 +22,7 @@ import {
   selectCarreras,
   selectMaterias,
 } from '@/features/asistencias/asistenciasSlice';
-
+import { FormControl, FormHelperText } from '@mui/material';
 const validationSchema = Yup.object({
   fecha: Yup.date().nullable().required('La fecha es requerida'),
   carrera: Yup.object().nullable().required('La carrera es requerida'),
@@ -87,22 +87,7 @@ function AsistenciasForm({ values, isEdit, onSubmit }) {
           <form onSubmit={formik.handleSubmit}>
             <Stack spacing={2}>
               <Typography variant="h2">Datos de asistencia</Typography>
-              <Button
-                startIcon={<Home />}
-                variant="contained"
-                color="secondary"
-                onClick={() =>
-                  console.log(
-                    formik.values.fecha,
-                    formik.values.carrera,
-                    formik.values.materia,
-                    formik.values.alumnos
-                  )
-                }
-                sx={{ width: { xs: '100%', sm: 'auto' } }}
-              >
-                Imprimir
-              </Button>
+              
               <TextField
                 InputLabelProps={{
                   ...(formik.values.fecha == '' && { shrink: true }),
@@ -118,6 +103,7 @@ function AsistenciasForm({ values, isEdit, onSubmit }) {
                 helperText={formik.touched.fecha && formik.errors.fecha}
               />
               {carreras && (
+                <FormControl fullWidth error={formik.touched.carrera && Boolean(formik.errors.carrera)}>
                 <Autocomplete
                   disablePortal
                   id="carrera"
@@ -134,6 +120,8 @@ function AsistenciasForm({ values, isEdit, onSubmit }) {
                   )}
                   isOptionEqualToValue={(option, value) => option.id === value.id}
                 />
+                <FormHelperText>{formik.touched.carrera && formik.errors.carrera}</FormHelperText>
+              </FormControl>
               )}
               {materias && (
                 <Autocomplete
@@ -150,11 +138,15 @@ function AsistenciasForm({ values, isEdit, onSubmit }) {
                     <TextField {...params} label="Materia" />
                   )}
                   isOptionEqualToValue={(option, value) => option.id === value.id}
+                  error={formik.touched.materia && Boolean(formik.errors.materia)}
+                  helperText={formik.touched.materia && formik.errors.materia}
                 />
               )}
               {alumnos !== null ? (
                 <ListaAlumnos listaAlumnos={alumnos} />
-              ) : null}
+              ) :  <Typography variant="body1" >
+                  Selecciona una carrera para ver los alumnos!
+                  </Typography>}
               <Grid
                 container
                 sx={{
@@ -170,6 +162,7 @@ function AsistenciasForm({ values, isEdit, onSubmit }) {
                     color="primary"
                     type="submit"
                     startIcon={<Save />}
+                    disabled={formik.isValidating || !formik.isValid}
                     sx={{ width: { xs: '100%', sm: 'auto' } }}
                   >
                     Guardar
@@ -185,7 +178,7 @@ function AsistenciasForm({ values, isEdit, onSubmit }) {
                   >
                     Limpiar
                   </Button>
-                </Grid>
+                  </Grid>
                 <Grid item>
                   <Button
                     startIcon={<Home />}

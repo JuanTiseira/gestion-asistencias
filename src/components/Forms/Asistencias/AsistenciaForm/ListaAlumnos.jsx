@@ -4,10 +4,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useDispatch } from 'react-redux';
 import { changeAlumnos } from '@/features/alumnos/alumnosSlice';
 
-const estadosAsistencia = ['Presente', 'Ausente', 'Tardanza', 'Justificado'];
+const estadosAsistencia = ['PRESENTE', 'AUSENTE', 'TARDANZA', 'JUSTIFICADO'];
 
 function ListaAlumnos({ listaAlumnos }) {
-  const [alumnos, setAlumnos] = useState(listaAlumnos.map(alumno => ({...alumno, estado_asistencia: 'Presente'})));
+  const [alumnos, setAlumnos] = useState(listaAlumnos.map(alumno => ({...alumno, estado_asistencia: 'PRESENTE'})));
   const dispatch = useDispatch();
 
   const handleChangeEstado = (alumno, estado_asistencia) => {

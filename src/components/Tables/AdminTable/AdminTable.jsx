@@ -38,7 +38,8 @@ function AdminTable({ theme, usersData }) {
 
     const selectedUserData = usersData.find((user) => user.id === userId);
     dispatch(selectedUser(selectedUserData));
-    navigate('/administracion/editar-usuario');
+    navigate(`/administracion/editar-usuario/${userId}`);
+
   };
   
 
