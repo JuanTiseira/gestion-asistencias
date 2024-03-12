@@ -9,7 +9,7 @@ const estadosAsistencia = ['PRESENTE', 'AUSENTE', 'TARDANZA', 'JUSTIFICADO'];
 function ListaAlumnos({ listaAlumnos }) {
   const [alumnos, setAlumnos] = useState(listaAlumnos.map(alumno => ({...alumno, estado_asistencia: 'PRESENTE'})));
   const dispatch = useDispatch();
-
+  dispatch(changeAlumnos(alumnos));
   const handleChangeEstado = (alumno, estado_asistencia) => {
     setAlumnos(alumnos.map(a => (a.id === alumno.id ? { ...a, estado_asistencia } : a)));
     dispatch(changeAlumnos(alumnos.map(a => (a.id === alumno.id ? { ...a, estado_asistencia } : a))));
@@ -27,6 +27,7 @@ function ListaAlumnos({ listaAlumnos }) {
       }}
     >
       <h2>Lista de Alumnos</h2>
+
       <List>
         {alumnos.map(alumno => (
           <ListItem key={alumno.id}>
